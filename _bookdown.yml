@@ -1,10 +1,10 @@
 new_session: yes
 delete_merged_file: true
-book_filename: "tlverse-handbook"
-clean: [packages.bib, tlverse-handbook.bbl]
+book_filename: "tlverse-developers"
+clean: [packages.bib, tlverse-developers.bbl]
 before_chapter_script: "_common.R"
 keep_tex: true
-output_dir: "_handbook"
+output_dir: "_developers"
 
 language:
   label:
@@ -15,17 +15,15 @@ language:
 
 rmd_files: [
   "index.Rmd",
-  "01-preface.Rmd",
-  "02-roadmap.Rmd",
-  "03-tlverse.Rmd",
-  "04-data.Rmd",
-  "05-origami.Rmd",
-  "06-sl3.Rmd",
-  "07-tmle3.Rmd",
-  "08-tmle3mopttx.Rmd",
-  "09-tmle3shift.Rmd",
-  "10-tmle3mediate.Rmd",
-  #"11-tmle3survival.Rmd",
-  "99-primer_R6.Rmd",
+  "010-motivation.Rmd",
+  "020-tlverse.Rmd",
+  "030-delayed.Rmd",
+  "050-origami.Rmd",
+  "060-sl3.Rmd",
+  "070-tmle3.Rmd",
+  "080-tmle3sim.Rmd",
+  "090-hal9001.Rmd",
+  "100-contribution.Rmd",
+  "110-quality.Rmd",
   "references.Rmd"
 ]

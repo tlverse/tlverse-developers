@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Chapter 30 TMLE Specification | Developer’s Guide to the tlverse</title>
+
+    <meta name="author" content="Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips" />
+  
+  <!-- JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script>
+  <script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script>
+    <script src="libs/header-attrs-2.8/header-attrs.js"></script>
+    <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet" />
+    <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script>
+    <script src="libs/bs3compat-0.2.5.9001/transition.js"></script>
+    <script src="libs/bs3compat-0.2.5.9001/tabs.js"></script>
+    <script src="libs/bs3compat-0.2.5.9001/bs3compat.js"></script>
+    <link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet" />
+    <script src="libs/bs4_book-1.0.0/bs4_book.js"></script>
+    <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+    <link href="libs/vis-4.20.1/vis.css" rel="stylesheet" />
+    <script src="libs/vis-4.20.1/vis.min.js"></script>
+    <script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
+    <span class="math inline">
+    \(\DeclareMathOperator{\expit}{expit}\)
+    \(\DeclareMathOperator{\logit}{logit}\)
+    \(\DeclareMathOperator*{\argmin}{\arg\!\min}\)
+    \(\newcommand{\indep}{\perp\!\!\!\perp}\)
+    \(\newcommand{\coloneqq}{\mathrel{=}}\)
+    \(\newcommand{\R}{\mathbb{R}}\)
+    \(\newcommand{\E}{\mathbb{E}}\)
+    \(\newcommand{\M}{\mathcal{M}}\)
+    \(\renewcommand{\P}{\mathbb{P}}\)
+    \(\newcommand{\I}{\mathbb{I}}\)
+    \(\newcommand{\1}{\mathbbm{1}}\)
+    </span>
+    <script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script>
+
+  <!-- CSS -->
+    
+</head>
+
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book">
+    <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Developer’s Guide to the tlverse</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+      </form>
+
+      <nav aria-label="Table of contents">
+        <h2>Table of contents</h2>
+        <div id="book-toc"></div>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="#">View book source <i class="fab fa-github"></i></a></li></p>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="col-sm-12 col-md-9 col-lg-7" id="content">
+<div id="tmle-specification" class="section level1" number="30">
+<h1><span class="header-section-number">Chapter 30</span> TMLE Specification</h1>
+<p>The <code>tmle3</code> framework described above is completely general, and allows most
+components of the TMLE procedure to be specified in a modular way. However, most
+end users will not be interested in manually specifying all of these components.
+Therefore, <code>tmle3</code> implements a <code>tmle3_Spec</code> object that bundles a set of
+components into a <em>specification</em> that, with minimal additional detail, can be
+run by an end-user:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="tmle-specification.html#cb28-1" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">W =</span> <span class="fu">c</span>(<span class="st">&quot;apgar1&quot;</span>, <span class="st">&quot;apgar5&quot;</span>, <span class="st">&quot;gagebrth&quot;</span>, <span class="st">&quot;mage&quot;</span>, <span class="st">&quot;meducyrs&quot;</span>,</span>
+<span id="cb28-2"><a href="tmle-specification.html#cb28-2" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;sexn&quot;</span>),</span>
+<span id="cb28-3"><a href="tmle-specification.html#cb28-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">A =</span> <span class="st">&quot;parity01&quot;</span>,</span>
+<span id="cb28-4"><a href="tmle-specification.html#cb28-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">Y =</span> <span class="st">&quot;haz01&quot;</span>)</span>
+<span id="cb28-5"><a href="tmle-specification.html#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="tmle-specification.html#cb28-6" aria-hidden="true" tabindex="-1"></a>lrnr_glm_fast <span class="ot">&lt;-</span> <span class="fu">make_learner</span>(Lrnr_glm_fast)</span>
+<span id="cb28-7"><a href="tmle-specification.html#cb28-7" aria-hidden="true" tabindex="-1"></a>lrnr_mean <span class="ot">&lt;-</span> <span class="fu">make_learner</span>(Lrnr_mean)</span>
+<span id="cb28-8"><a href="tmle-specification.html#cb28-8" aria-hidden="true" tabindex="-1"></a>learner_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> lrnr_mean, <span class="at">A =</span> lrnr_glm_fast)</span>
+<span id="cb28-9"><a href="tmle-specification.html#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="tmle-specification.html#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># make a new copy to deal with data.table weirdness</span></span>
+<span id="cb28-11"><a href="tmle-specification.html#cb28-11" aria-hidden="true" tabindex="-1"></a>cpp2 <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">copy</span>(cpp)</span>
+<span id="cb28-12"><a href="tmle-specification.html#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-13"><a href="tmle-specification.html#cb28-13" aria-hidden="true" tabindex="-1"></a>tmle_fit_from_spec <span class="ot">&lt;-</span> <span class="fu">tmle3</span>(<span class="fu">tmle_TSM_all</span>(), cpp2, nodes, learner_list)</span>
+<span id="cb28-14"><a href="tmle-specification.html#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tmle_fit_from_spec)</span>
+<span id="cb28-15"><a href="tmle-specification.html#cb28-15" aria-hidden="true" tabindex="-1"></a>A tmle3_Fit that took <span class="dv">1</span> <span class="fu">step</span>(s)</span>
+<span id="cb28-16"><a href="tmle-specification.html#cb28-16" aria-hidden="true" tabindex="-1"></a>   type      param init_est tmle_est       se   lower   upper psi_transformed</span>
+<span id="cb28-17"><a href="tmle-specification.html#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span>  TSM E[Y_{A<span class="ot">=</span><span class="dv">0</span>}]  <span class="fl">0.55517</span>  <span class="fl">0.69795</span> <span class="fl">0.046923</span> <span class="fl">0.60598</span> <span class="fl">0.78991</span>         <span class="fl">0.69795</span></span>
+<span id="cb28-18"><a href="tmle-specification.html#cb28-18" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span>  TSM E[Y_{A<span class="ot">=</span><span class="dv">1</span>}]  <span class="fl">0.55517</span>  <span class="fl">0.52674</span> <span class="fl">0.014737</span> <span class="fl">0.49786</span> <span class="fl">0.55562</span>         <span class="fl">0.52674</span></span>
+<span id="cb28-19"><a href="tmle-specification.html#cb28-19" aria-hidden="true" tabindex="-1"></a>   lower_transformed upper_transformed</span>
+<span id="cb28-20"><a href="tmle-specification.html#cb28-20" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span>           <span class="fl">0.60598</span>           <span class="fl">0.78991</span></span>
+<span id="cb28-21"><a href="tmle-specification.html#cb28-21" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span>           <span class="fl">0.49786</span>           <span class="fl">0.55562</span></span></code></pre></div>
+<p>Currently, this is effectively a hard-coded list of those details: the structure
+of the NPSEM, the parameters, and the update procedure are coded into the
+specification. Only the data, the roles of the variables, and the <code>sl3</code>
+learners to use for likelihood estimation. Ideally, instead a <code>tmle3_Spec</code> would
+represent a set of reasonable defaults for a particular TMLE, that experienced
+users could override where appropriate.</p>
+</div>
+  </main>
+
+  <div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page">
+      <h2>On this page</h2>
+      <div id="book-on-this-page"></div>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          <li><a id="book-source" href="#">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="#">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5">
+  <div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Developer’s Guide to the tlverse</strong>" was written by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on September 10, 2021.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

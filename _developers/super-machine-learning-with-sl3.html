@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 5 Super (Machine) Learning with sl3 | Developer’s Guide to the tlverse</title>
+<meta name="author" content="Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.8/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.9001/transition.js"></script><script src="libs/bs3compat-0.2.5.9001/tabs.js"></script><script src="libs/bs3compat-0.2.5.9001/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
+<script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
+</head>
+<body>
+<span class="math inline">
+    \(\DeclareMathOperator{\expit}{expit}\)
+    \(\DeclareMathOperator{\logit}{logit}\)
+    \(\DeclareMathOperator*{\argmin}{\arg\!\min}\)
+    \(\newcommand{\indep}{\perp\!\!\!\perp}\)
+    \(\newcommand{\coloneqq}{\mathrel{=}}\)
+    \(\newcommand{\R}{\mathbb{R}}\)
+    \(\newcommand{\E}{\mathbb{E}}\)
+    \(\newcommand{\M}{\mathcal{M}}\)
+    \(\renewcommand{\P}{\mathbb{P}}\)
+    \(\newcommand{\I}{\mathbb{I}}\)
+    \(\newcommand{\1}{\mathbbm{1}}\)
+    </span>
+    <script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS --><div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Developer’s Guide to the tlverse</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">About this book</a></li>
+<li><a class="" href="why-we-need-yet-another-targeted-learning-package.html"><span class="header-section-number">1</span> Why we need yet another Targeted Learning package</a></li>
+<li><a class="" href="tlverse.html"><span class="header-section-number">2</span> Welcome to the tlverse</a></li>
+<li><a class="" href="computation-graphs-with-delayed.html"><span class="header-section-number">3</span> Computation Graphs with delayed</a></li>
+<li><a class="" href="cross-validation-with-origami.html"><span class="header-section-number">4</span> Cross-validation with origami</a></li>
+<li><a class="active" href="super-machine-learning-with-sl3.html"><span class="header-section-number">5</span> Super (Machine) Learning with sl3</a></li>
+<li><a class="" href="the-tmle-framework-with-tmle3.html"><span class="header-section-number">6</span> The TMLE Framework with tmle3</a></li>
+<li><a class="" href="monte-carlo-simulation-with-tmle3sim.html"><span class="header-section-number">7</span> Monte Carlo Simulation with tmle3sim</a></li>
+<li><a class="" href="highly-adaptive-lasso-with-hal9001.html"><span class="header-section-number">8</span> Highly Adaptive Lasso with hal9001</a></li>
+<li><a class="" href="contributing-to-the-tlverse.html"><span class="header-section-number">9</span> Contributing to the tlverse</a></li>
+<li><a class="" href="ensuring-code-quality.html"><span class="header-section-number">10</span> Ensuring Code Quality</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/tlverse/tlverse-handbook">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="super-machine-learning-with-sl3" class="section level1" number="5">
+<h1>
+<span class="header-section-number">5</span> Super (Machine) Learning with <code>sl3</code><a class="anchor" aria-label="anchor" href="#super-machine-learning-with-sl3"><i class="fas fa-link"></i></a>
+</h1>
+<p><em>Jeremy Coyle</em></p>
+<div id="intro-2" class="section level2" number="5.1">
+<h2>
+<span class="header-section-number">5.1</span> Intro<a class="anchor" aria-label="anchor" href="#intro-2"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="architecture-2" class="section level2" number="5.2">
+<h2>
+<span class="header-section-number">5.2</span> Architecture<a class="anchor" aria-label="anchor" href="#architecture-2"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="other-2" class="section level2" number="5.3">
+<h2>
+<span class="header-section-number">5.3</span> Other<a class="anchor" aria-label="anchor" href="#other-2"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="previous-documentation-2" class="section level2" number="5.4">
+<h2>
+<span class="header-section-number">5.4</span> Previous Documentation<a class="anchor" aria-label="anchor" href="#previous-documentation-2"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="introduction" class="section level2" number="5.5">
+<h2>
+<span class="header-section-number">5.5</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction"><i class="fas fa-link"></i></a>
+</h2>
+<p>This guide describes the process of implementing a learner class for a new
+machine learning algorithm. By writing a learner class for your favorite machine
+learning algorithm, you will be able to use it in all the places you could
+otherwise use any other <code>sl3</code> learners, including <code>Pipeline</code>s, <code>Stack</code>s, and
+Super Learner. We have done our best to streamline the process of creating new
+<code>sl3</code> learners.</p>
+<p>Before diving into defining a new learner, it will likely be helpful to read
+some background material. If you haven’t already read it, the <a href="intro_sl3.html">“Modern Machine
+Learning in R”</a> vignette is a good introduction to the <code>sl3</code>
+package and it’s underlying architecture. The
+<a href="https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html"><code>R6</code></a>
+documentation will help you understand how <code>R6</code> classes are defined. In
+addition, the help files for
+<a href="https://sl3.tlverse.org/reference/sl3_Task.html"><code>sl3_Task</code></a> and
+<a href="https://sl3.tlverse.org/reference/Lrnr_base.html"><code>Lrnr_base</code></a> are good
+resources for how those objects can be used. If you’re interested in defining
+learners that fit sub-learners, reading the documentation of the
+<a href="https://delayed.tlverse.org/articles/delayed.html"><code>delayed</code></a> package will be
+helpful.</p>
+<p>In the following sections, we introduce and review a template for a new <code>sl3</code>
+learner, describing the sections that can be used to define your new learner.
+This is followed by a discussion of the important task of documenting and
+testing your new learner. Finally, we conclude by explaining how you can add
+your learner to <code>sl3</code> so that others may make use of it.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tlverse.org/sl3">sl3</a></span><span class="op">)</span></code></pre></div>
+</div>
+<div id="learner-template" class="section level2" number="5.6">
+<h2>
+<span class="header-section-number">5.6</span> Learner Template<a class="anchor" aria-label="anchor" href="#learner-template"><i class="fas fa-link"></i></a>
+</h2>
+<p><code>sl3</code> provides a template of a learner for use in defining new learners. You can
+make a copy of the template to work on by invoking <code>write_learner_template</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Not run:</span>
+<span class="fu"><a href="https://tlverse.org/sl3/reference/write_learner_template.html">write_learner_template</a></span><span class="op">(</span><span class="st">"path/to/write/Learner_template.R"</span><span class="op">)</span></code></pre></div>
+<p>Let’s take a look at that template:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">##' Template of a \code{sl3} Learner.</span>
+<span class="co">##'</span>
+<span class="co">##' This is a template for defining a new learner.</span>
+<span class="co">##' This can be copied to a new file using \code{\link{write_learner_template}}.</span>
+<span class="co">##' The remainder of this documentation is an example of how you might write documentation for your new learner.</span>
+<span class="co">##' This learner uses \code{\link[my_package]{my_ml_fun}} from \code{my_package} to fit my favorite machine learning algorithm.</span>
+<span class="co">##'</span>
+<span class="co">##' @docType class</span>
+<span class="co">##' @importFrom R6 R6Class</span>
+<span class="co">##' @export</span>
+<span class="co">##' @keywords data</span>
+<span class="co">##' @return Learner object with methods for training and prediction. See \code{\link{Lrnr_base}} for documentation on learners.</span>
+<span class="co">##' @format \code{\link{R6Class}} object.</span>
+<span class="co">##' @family Learners</span>
+<span class="co">##'</span>
+<span class="co">##' @section Parameters:</span>
+<span class="co">##' \describe{</span>
+<span class="co">##'   \item{\code{param_1="default_1"}}{ This parameter does something.</span>
+<span class="co">##'   }</span>
+<span class="co">##'   \item{\code{param_2="default_2"}}{ This parameter does something else.</span>
+<span class="co">##'   }</span>
+<span class="co">##'   \item{\code{...}}{ Other parameters passed directly to \code{\link[my_package]{my_ml_fun}}. See its documentation for details.</span>
+<span class="co">##'   }</span>
+<span class="co">##' }</span>
+<span class="co">##'</span>
+<span class="co">##' @section Methods:</span>
+<span class="co">##' \describe{</span>
+<span class="co">##' \item{\code{special_function(arg_1)}}{</span>
+<span class="co">##'   My learner is special so it has a special function.</span>
+<span class="co">##'</span>
+<span class="co">##'   \itemize{</span>
+<span class="co">##'     \item{\code{arg_1}: A very special argument.</span>
+<span class="co">##'    }</span>
+<span class="co">##'   }</span>
+<span class="co">##'   }</span>
+<span class="co">##' }</span>
+<span class="va">Lrnr_template</span> <span class="op">&lt;-</span> <span class="kw">R6Class</span><span class="op">(</span>
+  classname <span class="op">=</span> <span class="st">"Lrnr_template"</span>, inherit <span class="op">=</span> <span class="va">Lrnr_base</span>,
+  portable <span class="op">=</span> <span class="cn">TRUE</span>, class <span class="op">=</span> <span class="cn">TRUE</span>,
+  <span class="co"># Above, you should change Lrnr_template (in both the object name and the classname argument)</span>
+  <span class="co"># to a name that indicates what your learner does</span>
+  public <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    <span class="co"># you can define default parameter values here</span>
+    <span class="co"># if possible, your learner should define defaults for all required parameters</span>
+    initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">param_1</span> <span class="op">=</span> <span class="st">"default_1"</span>, <span class="va">param_2</span> <span class="op">=</span> <span class="st">"default_2"</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+      <span class="co"># this captures all parameters to initialize and saves them as self$params</span>
+      <span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/args_to_list.html">args_to_list</a></span><span class="op">(</span><span class="op">)</span>
+      <span class="va">super</span><span class="op">$</span><span class="fu">initialize</span><span class="op">(</span>params <span class="op">=</span> <span class="va">params</span>, <span class="va">...</span><span class="op">)</span>
+    <span class="op">}</span>,
+
+    <span class="co"># you can define public functions that allow your learner to do special things here</span>
+    <span class="co"># for instance glm learner might return prediction standard errors</span>
+    special_function <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">arg_1</span><span class="op">)</span> <span class="op">{</span>
+    <span class="op">}</span>
+  <span class="op">)</span>,
+  private <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    <span class="co"># list properties your learner supports here.</span>
+    <span class="co"># Use sl3_list_properties() for a list of options</span>
+    .properties <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span>,
+
+    <span class="co"># list any packages required for your learner here.</span>
+    .required_packages <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"my_package"</span><span class="op">)</span>,
+
+    <span class="co"># .train takes task data and returns a fit object that can be used to generate predictions</span>
+    .train <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">task</span><span class="op">)</span> <span class="op">{</span>
+      <span class="co"># generate an argument list from the parameters that were</span>
+      <span class="co"># captured when your learner was initialized.</span>
+      <span class="co"># this allows users to pass arguments directly to your ml function</span>
+      <span class="va">args</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="va">params</span>
+
+      <span class="co"># get outcome variable type</span>
+      <span class="co"># preferring learner$params$outcome_type first, then task$outcome_type</span>
+      <span class="va">outcome_type</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">get_outcome_type</span><span class="op">(</span><span class="va">task</span><span class="op">)</span>
+      <span class="co"># should pass something on to your learner indicating outcome_type</span>
+      <span class="co"># e.g. family or objective</span>
+
+      <span class="co"># add task data to the argument list</span>
+      <span class="co"># what these arguments are called depends on the learner you are wrapping</span>
+      <span class="va">args</span><span class="op">$</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="va">X_intercept</span><span class="op">)</span>
+      <span class="va">args</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">outcome_type</span><span class="op">$</span><span class="fu">format</span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="va">Y</span><span class="op">)</span>
+
+      <span class="co"># only add arguments on weights and offset</span>
+      <span class="co"># if those were specified when the task was generated</span>
+      <span class="kw">if</span> <span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="fu">has_node</span><span class="op">(</span><span class="st">"weights"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+        <span class="va">args</span><span class="op">$</span><span class="va">weights</span> <span class="op">&lt;-</span> <span class="va">task</span><span class="op">$</span><span class="va">weights</span>
+      <span class="op">}</span>
+
+      <span class="kw">if</span> <span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="fu">has_node</span><span class="op">(</span><span class="st">"offset"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+        <span class="va">args</span><span class="op">$</span><span class="va">offset</span> <span class="op">&lt;-</span> <span class="va">task</span><span class="op">$</span><span class="va">offset</span>
+      <span class="op">}</span>
+
+      <span class="co"># call a function that fits your algorithm</span>
+      <span class="co"># with the argument list you constructed</span>
+      <span class="va">fit_object</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/call_with_args.html">call_with_args</a></span><span class="op">(</span><span class="va">my_ml_fun</span>, <span class="va">args</span><span class="op">)</span>
+
+      <span class="co"># return the fit object, which will be stored</span>
+      <span class="co"># in a learner object and returned from the call</span>
+      <span class="co"># to learner$predict</span>
+      <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">fit_object</span><span class="op">)</span>
+    <span class="op">}</span>,
+
+    <span class="co"># .predict takes a task and returns predictions from that task</span>
+    .predict <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">task</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span>
+      <span class="va">self</span><span class="op">$</span><span class="va">training_task</span>
+      <span class="va">self</span><span class="op">$</span><span class="va">training_outcome_type</span>
+      <span class="va">self</span><span class="op">$</span><span class="va">fit_object</span>
+
+      <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">fit_object</span>, <span class="va">task</span><span class="op">$</span><span class="va">X</span><span class="op">)</span>
+      <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span>
+    <span class="op">}</span>
+  <span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<p>The template has comments indicating where details specific to the learner
+you’re trying to implement should be filled in. In the next section, we will
+discuss those details further.</p>
+</div>
+<div id="defining-your-learner" class="section level2" number="5.7">
+<h2>
+<span class="header-section-number">5.7</span> Defining your Learner<a class="anchor" aria-label="anchor" href="#defining-your-learner"><i class="fas fa-link"></i></a>
+</h2>
+<div id="learner-name-and-class" class="section level3" number="5.7.1">
+<h3>
+<span class="header-section-number">5.7.1</span> Learner Name and Class<a class="anchor" aria-label="anchor" href="#learner-name-and-class"><i class="fas fa-link"></i></a>
+</h3>
+<p>At the top of the template, we define an object <code>Lrnr_template</code> and set
+<code>classname = "Lrnr_template"</code>. You should modify these to match the name of your
+new learner, which should also match the name of the corresponding R file. Note
+that the name should be prefixed by <code>Lrnr_</code> and use
+<a href="https://en.wikipedia.org/wiki/Snake_case"><code>snake_case</code></a>.</p>
+</div>
+<div id="publicinitialize" class="section level3" number="5.7.2">
+<h3>
+<span class="header-section-number">5.7.2</span> <code>public$initialize</code><a class="anchor" aria-label="anchor" href="#publicinitialize"><i class="fas fa-link"></i></a>
+</h3>
+<p>This function defines the constructor for your learner, and it stores the
+arguments (if any) provided when a user calls
+<code><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner(Lrnr_your_learner, ...)</a></code>. You can also provide default parameter
+values, just as the template does with <code>param_1 = "default_1"</code>, and
+<code>param_2 = "default_2"</code>. All parameters used by your newly defined learners
+should have defaults whenever possible. This will allow users to use your
+learner without having to figure out what reasonable parameter values might be.
+Parameter values should be documented; see the section below on
+<a href="ensuring-code-quality.html#doctest">documentation</a> for details.</p>
+</div>
+<div id="publicspecial_functions" class="section level3" number="5.7.3">
+<h3>
+<span class="header-section-number">5.7.3</span> <code>public$special_function</code>s<a class="anchor" aria-label="anchor" href="#publicspecial_functions"><i class="fas fa-link"></i></a>
+</h3>
+<p>You can of course define functions for things only your learner can do. These
+should be public functions like the <code>special_function</code> defined in the example.
+These should be documented; see the section below on <a href="ensuring-code-quality.html#doctest">documentation</a>
+for details.</p>
+</div>
+<div id="private.properties" class="section level3" number="5.7.4">
+<h3>
+<span class="header-section-number">5.7.4</span> <code>private$.properties</code><a class="anchor" aria-label="anchor" href="#private.properties"><i class="fas fa-link"></i></a>
+</h3>
+<p>This field defines properties supported by your learner. This may include
+different outcome types that are supported, offsets and weights, amongst many
+other possibilities. To see a list of all properties supported/used by at least
+one learner, you may invoke <code>sl3_list_properties</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="super-machine-learning-with-sl3.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sl3_list_properties</span>()</span>
+<span id="cb12-2"><a href="super-machine-learning-with-sl3.html#cb12-2" aria-hidden="true" tabindex="-1"></a> [<span class="dv">1</span>] <span class="st">"binomial"</span>      <span class="st">"categorical"</span>   <span class="st">"continuous"</span>    <span class="st">"cv"</span>           </span>
+<span id="cb12-3"><a href="super-machine-learning-with-sl3.html#cb12-3" aria-hidden="true" tabindex="-1"></a> [<span class="dv">5</span>] <span class="st">"density"</span>       <span class="st">"h2o"</span>           <span class="st">"ids"</span>           <span class="st">"importance"</span>   </span>
+<span id="cb12-4"><a href="super-machine-learning-with-sl3.html#cb12-4" aria-hidden="true" tabindex="-1"></a> [<span class="dv">9</span>] <span class="st">"offset"</span>        <span class="st">"preprocessing"</span> <span class="st">"sampling"</span>      <span class="st">"screener"</span>     </span>
+<span id="cb12-5"><a href="super-machine-learning-with-sl3.html#cb12-5" aria-hidden="true" tabindex="-1"></a>[<span class="dv">13</span>] <span class="st">"timeseries"</span>    <span class="st">"weights"</span>       <span class="st">"wrapper"</span>      </span></code></pre></div>
+</div>
+<div id="private.required_packages" class="section level3" number="5.7.5">
+<h3>
+<span class="header-section-number">5.7.5</span> <code>private$.required_packages</code><a class="anchor" aria-label="anchor" href="#private.required_packages"><i class="fas fa-link"></i></a>
+</h3>
+<p>This field defines other R packages required for your learner to work properly.
+These will be loaded when an object of your new learner class is initialized.</p>
+</div>
+<div id="user-interface-for-learners" class="section level3" number="5.7.6">
+<h3>
+<span class="header-section-number">5.7.6</span> User Interface for Learners<a class="anchor" aria-label="anchor" href="#user-interface-for-learners"><i class="fas fa-link"></i></a>
+</h3>
+<p>If you’ve used <code>sl3</code> before, you may have noticed that while users are
+instructed to use <code>learner$train</code>, <code>learner$predict</code>, and <code>learner$chain</code>, to
+train, generate predictions, and generate a chained task for a given learner
+object, respectively, the template does not implement these methods. Instead,
+the template implements private methods called <code>.train</code>, <code>.predict</code>, and
+<code>.chain</code>. The specifics of these methods are explained below; however, it is
+helpful to first understand how the two sets of methods are related. At the risk
+of complicating things further, it is worth noting that there is actually a
+third set of methods (<code>learner$base_train</code>, <code>learner$base_predict</code>, and
+<code>learner$base_chain</code>) of which you may not be aware.</p>
+<p>So, what happens when a user calls <code>learner$train</code>? That method generates a
+<code>delayed</code> object using the <code>delayed_learner_train</code> function, and then computes
+that delayed object. In turn, <code>delayed_learner_train</code> defines a delayed
+computation that calls <code>base_train</code>, a user-facing function that can be used to
+train tasks without using the facilities of the <code>delayed</code> package. <code>base_train</code>
+validates the user input, and in turn calls <code>private$.train</code>. When
+<code>private$.train</code> returns a <code>fit_object</code>, <code>base_train</code> takes that fit object,
+generates a learner fit object, and returns it to the user.</p>
+<p>Each call to <code>learner$train</code> involves three separate training methods:</p>
+<ol style="list-style-type: decimal">
+<li>The user-facing <code>learner$train</code> – trains a learner in a manner that can be
+parallelized using <code>delayed</code>, which calls <code>...</code>
+</li>
+<li>
+<code>...</code> the user-facing <code>learner$base_train</code> that validates user input, and
+which calls <code>...</code>
+</li>
+<li>
+<code>...</code> the internal <code>private$.train</code>, which does the actual work of fitting
+the learner and returning the fit object.</li>
+</ol>
+<p>The logic in the user-facing <code>learner$train</code> and <code>learner$base_train</code> is defined
+in the <code>Lrnr_base</code> base class and is shared across all learners. As such, these
+methods need not be reimplemented in individual learners. By contrast,
+<code>private$.train</code> contains the behavior that is specific to each individual
+learner and should be reimplemented at the level of each individual learner.
+Since <code>learner$base_train</code> does not use <code>delayed</code>, it may be helpful to use it
+when debugging the training code in a new learner. The program flow used for
+prediction and chaining is analogous.</p>
+</div>
+<div id="private.train" class="section level3" number="5.7.7">
+<h3>
+<span class="header-section-number">5.7.7</span> <code>private$.train</code><a class="anchor" aria-label="anchor" href="#private.train"><i class="fas fa-link"></i></a>
+</h3>
+<p>This is the main training function, which takes in a task and returns a
+<code>fit_object</code> that contains all information needed to generate predictions. The
+fit object should not contain more data than is absolutely necessary, as
+including excess information will create needless inefficiencies. Many learner
+functions (like <code>glm</code>) store one or more copies of their training data – this
+uses unnecessary memory and will hurt learner performance for large sample
+sizes. Thus, these copies of the data should be removed from the fit object
+before it is returned. You may make use of <code>true_obj_size</code> to estimate the size
+of your <code>fit_object</code>. For most learners, <code>fit_object</code> size should <em>not grow</em>
+linearly with training sample size. If it does, and this is unexpected, please
+try to reduce the size of the <code>fit_object</code>.</p>
+<p>Most of the time, the learner you are implementing will be fit using a function
+that already exists elsewhere. We’ve built some tools to facilitate passing
+parameter values directly to such functions. The <code>private$.train</code> function in
+the template uses a common pattern: it builds up an argument list starting with
+the parameter values and using data from the task, it then uses <code>call_with_args</code>
+to call <code>my_ml_fun</code> with that argument list. It’s not required that learners use
+this pattern, but it will be helpful in the common case where the learner is
+simply wrapping an underlying <code>my_ml_fun</code>.</p>
+<p>By default, <code>call_with_args</code> will pass all arguments in the argument list
+matched by the definition of the function that it is calling. This allows the
+learner to silently drop irrelevant parameters from the call to <code>my_ml_fun</code>.
+Some learners either capture important arguments using dot arguments (<code>...</code>) or
+by passing important arguments through such dot arguments on to a secondary
+function. Both of these cases can be handled using the <code>other_valid</code> and
+<code>keep_all</code> options to <code>call_with_args</code>. The former allows you to list other
+valid arguments and the latter disables argument filtering altogether.</p>
+</div>
+<div id="private.predict" class="section level3" number="5.7.8">
+<h3>
+<span class="header-section-number">5.7.8</span> <code>private$.predict</code><a class="anchor" aria-label="anchor" href="#private.predict"><i class="fas fa-link"></i></a>
+</h3>
+<p>This is the main prediction function, and takes in a task and generates
+predictions for that task using the <code>fit_object</code>. If those predictions are
+1-dimensional, they will be coerced to a vector by <code>base_predict</code>.</p>
+</div>
+<div id="private.chain" class="section level3" number="5.7.9">
+<h3>
+<span class="header-section-number">5.7.9</span> <code>private$.chain</code><a class="anchor" aria-label="anchor" href="#private.chain"><i class="fas fa-link"></i></a>
+</h3>
+<p>This is the main chaining function. It takes in a task and generates a chained
+task (based on the input task) using the given <code>fit_object</code>. If this method is
+not implemented, your learner will use the default chaining behavior, which is
+to return a new task where the covariates are defined as your learner’s
+predictions for the current task.</p>
+</div>
+<div id="advanced-learners-with-sub-learners" class="section level3" number="5.7.10">
+<h3>
+<span class="header-section-number">5.7.10</span> <em>Advanced</em>: Learners with sub-learners<a class="anchor" aria-label="anchor" href="#advanced-learners-with-sub-learners"><i class="fas fa-link"></i></a>
+</h3>
+<p>Generally speaking, the above sections will be all that’s required for
+implementing a new learner in the <code>sl3</code> framework. In some cases, it may be
+desirable to define learners that have “sub-learners” or other learners on which
+they depend. Examples of such learners are <code>Stack</code>, <code>Pipeline</code>, <code>Lrnr_cv</code>, and
+<code>Lrnr_sl</code>. In order to parallelize the fitting of these sub-learners using
+<code>delayed</code>, these learners implement a specialized <code>private$.train_sublearners</code>
+method that calls <code>delayed_learner_train</code> on their sub-learners, returning a
+single <code>delayed</code> object that, when evaluated, returns all relevant fit objects
+from these sub-learners. The result of that call is then passed as a second
+argument to their <code>private$.train</code> method, which now has the function prototype
+<code>private$.train(task, trained_sublearners)</code>. Learners defined in such a manner
+usually have a much shorter computation time; the <code>predict</code> and <code>chain</code> methods
+are not currently parallelized in this way, although this is subject to change
+in the future.</p>
+<p>If, like these learners, your learner depends on sub-learners, you have two
+options:</p>
+<ol style="list-style-type: decimal">
+<li>Don’t worry about parallelizing sub-learners. Simply implement
+<code>private$.train</code> as discussed above, being sure to call
+<code>sublearner$base_train</code> and not <code>sublearner$train</code>, to avoid nesting calls to
+<code>delayed</code>, which may result in sub-optimal performance.</li>
+<li>Implement <code>private$.train_sublearners(task)</code> and <code>private$.train(task,    trained_sublearners)</code>, to parallelize sub-learners using <code>delayed</code>. We
+suggest reviewing the implementations of the <code>Stack</code>, <code>Pipeline</code>, <code>Lrnr_cv</code>
+and <code>Lrnr_sl</code> to get a better understanding of how to implement parallelized
+sub-learners.</li>
+</ol>
+<p>In either case, you should be careful to call <code>sublearner$base_predict</code> and
+<code>sublearner$base_chain</code>, instead of <code>sublearner$predict</code> and <code>sublearner$chain</code>,
+except in the context of the <code>private$.train_sublearners</code> function, where you
+should use <code>delayed_learner_fit_predict</code> and <code>delayed_learner_fit_chain</code>.</p>
+
+</div>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="cross-validation-with-origami.html"><span class="header-section-number">4</span> Cross-validation with origami</a></div>
+<div class="next"><a href="the-tmle-framework-with-tmle3.html"><span class="header-section-number">6</span> The TMLE Framework with tmle3</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#super-machine-learning-with-sl3"><span class="header-section-number">5</span> Super (Machine) Learning with sl3</a></li>
+<li><a class="nav-link" href="#intro-2"><span class="header-section-number">5.1</span> Intro</a></li>
+<li><a class="nav-link" href="#architecture-2"><span class="header-section-number">5.2</span> Architecture</a></li>
+<li><a class="nav-link" href="#other-2"><span class="header-section-number">5.3</span> Other</a></li>
+<li><a class="nav-link" href="#previous-documentation-2"><span class="header-section-number">5.4</span> Previous Documentation</a></li>
+<li><a class="nav-link" href="#introduction"><span class="header-section-number">5.5</span> Introduction</a></li>
+<li><a class="nav-link" href="#learner-template"><span class="header-section-number">5.6</span> Learner Template</a></li>
+<li>
+<a class="nav-link" href="#defining-your-learner"><span class="header-section-number">5.7</span> Defining your Learner</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#learner-name-and-class"><span class="header-section-number">5.7.1</span> Learner Name and Class</a></li>
+<li><a class="nav-link" href="#publicinitialize"><span class="header-section-number">5.7.2</span> public$initialize</a></li>
+<li><a class="nav-link" href="#publicspecial_functions"><span class="header-section-number">5.7.3</span> public$special_functions</a></li>
+<li><a class="nav-link" href="#private.properties"><span class="header-section-number">5.7.4</span> private$.properties</a></li>
+<li><a class="nav-link" href="#private.required_packages"><span class="header-section-number">5.7.5</span> private$.required_packages</a></li>
+<li><a class="nav-link" href="#user-interface-for-learners"><span class="header-section-number">5.7.6</span> User Interface for Learners</a></li>
+<li><a class="nav-link" href="#private.train"><span class="header-section-number">5.7.7</span> private$.train</a></li>
+<li><a class="nav-link" href="#private.predict"><span class="header-section-number">5.7.8</span> private$.predict</a></li>
+<li><a class="nav-link" href="#private.chain"><span class="header-section-number">5.7.9</span> private$.chain</a></li>
+<li><a class="nav-link" href="#advanced-learners-with-sub-learners"><span class="header-section-number">5.7.10</span> Advanced: Learners with sub-learners</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/tlverse/tlverse-handbook/blob/master/060-sl3.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/tlverse/tlverse-handbook/edit/master/060-sl3.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Developer’s Guide to the tlverse</strong>" was written by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on September 10, 2021.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+</html>

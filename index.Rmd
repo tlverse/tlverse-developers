@@ -1,9 +1,9 @@
 ---
 knit: "bookdown::render_book"
-title: "Targeted Learning in R"
-subtitle: "Causal Data Science with the tlverse Software Ecosystem"
-author: "Mark van der Laan, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael
-  Phillips, Alan Hubbard"
+title: "Developer's Guide to the tlverse"
+subtitle: ""
+author: "Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael
+  Phillips"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 documentclass: krantz
 site: bookdown::bookdown_site
@@ -20,8 +20,7 @@ url: 'https\://tlverse.org/tlverse-handbook/'
 github-repo: tlverse/tlverse-handbook
 twitter-handle: tlverse
 graphics: yes
-description: "An open source handbook for causal machine learning and data
-  science with the Targeted Learning framework using the [`tlverse` software
+description: "A Developer's Guide to understanding and contributing to the [`tlverse` software
   ecosystem](https://github.com/tlverse)."
 favicon: "img/favicons/favicon.png"
 ---
@@ -34,7 +33,7 @@ Targeted Learning methodology in practice using the [`tlverse` software
 ecosystem](https://github.com/tlverse). This work is currently in an early draft
 phase and is available to facilitate input from the community. To view or
 contribute to the available content, consider visiting the [GitHub
-repository](https://github.com/tlverse/tlverse-handbook).
+repository](https://github.com/tlverse/tlverse-developers).
 
 <!--- For HTML Only --->
 `r if (knitr::is_latex_output()) '<!--'`
@@ -51,65 +50,39 @@ repository](https://github.com/tlverse/tlverse-handbook).
 ## Outline {#outline}
 
 The contents of this handbook are meant to serve as a reference guide for
-applied research as well as materials that can be taught in a series of short
-courses focused on the applications of Targeted Learning. Each section
-introduces a set of distinct causal questions, motivated by a case study,
-alongside statistical methodology and software for assessing the causal claim of
-interest. The (evolving) set of materials includes
+developers interested in using the tlverse to implement novel estimators
+and other methodological improvements related to Targeted Learning. The
+goal of tlverse is to make it easier for methods researchers to quickly implement 
+and test (through Monte Carlo simulation) their innovations. Having done so,
+we hope that they will make their tlverse-based implementations available
+to people interested in applying their methods going forward. We believe that
+this is the best way to create a maintainable and continually improving
+set of implementations for Targeted Learning.
 
-* Motivation: [Why we need a statistical
-    revolution](https://senseaboutscienceusa.org/super-learning-and-the-revolution-in-knowledge/)
-* The Roadmap and introductory case study: the WASH Beneifits data
+The (evolving) set of materials includes:
+
+* Motivation
 * Introduction to the [`tlverse` software
     ecosystem](https://tlverse.org)
+* Computation graphs and Parallelization with the [`delayed`](https://github.com/tlverse/delayed)
+    package
 * Cross-validation with the [`origami`](https://github.com/tlverse/origami)
     package
 * Ensemble machine learning with the
     [`sl3`](https://github.com/tlverse/sl3) package
-* Targeted learning for causal inference with the
+* Targeted Learning with the
     [`tmle3`](https://github.com/tlverse/tmle3) package
-* Optimal treatments regimes and the
-    [`tmle3mopttx`](https://github.com/tlverse/tmle3mopttx) package
-* Stochastic treatment regimes and the
-    [`tmle3shift`](https://github.com/tlverse/tmle3shift) package
-* Causal mediation analysis with the
-    [`tmle3mediate`](https://github.com/tlverse/tmle3mediate) package
-* _Coda_: [Why we need a statistical
-    revolution](https://senseaboutscienceusa.org/super-learning-and-the-revolution-in-knowledge/)
+* Monte Carlo simulation with the
+    [`tmle3sim`](https://github.com/tlverse/tmle3sim) package
+* Highly Adaptive Lasso with the
+    [`hal9001`](https://github.com/tlverse/hal9001) package
+* How to contribute
+* Code quality (Style, Documentation, Testing)
 
-## What this book is not {-}
 
-The focus of this work is __not__ on providing in-depth technical descriptions
-of current statistical methodology or recent advancements. Instead, the goal is
-to convey key details of state-of-the-art techniques in an manner that is both
-clear and complete, without burdening the reader with extraneous information.
-We hope that the presentations herein will serve as references for researchers
--- methodologists and domain specialists alike -- that empower them to deploy
-the central tools of Targeted Learning in an efficient manner. For technical
-details and in-depth descriptions of both classical theory and recent advances
-in the field of Targeted Learning, the interested reader is invited to consult
-@vdl2011targeted and/or @vdl2018targeted as appropriate. The primary literature
-in statistical causal inference, machine learning, and non/semiparametric theory
-include many of the most recent advances in Targeted Learning and related areas.
+We encourage you to reference the corresponding chapters of the [`tlverse` handbook](tlverse.org/tlverse-handbook) for a more applied perspective on how end users will use these tools for their own research.
 
 ## About the authors {-}
-
-### Mark van der Laan {-}
-
-Mark van der Laan, PhD, is Professor of Biostatistics and Statistics at UC
-Berkeley. His research interests include statistical methods in computational
-biology, survival analysis, censored data, adaptive designs, targeted maximum
-likelihood estimation, causal inference, data-adaptive loss-based learning, and
-multiple testing. His research group developed loss-based super learning in
-semiparametric models, based on cross-validation, as a generic optimal tool for
-the estimation of infinite-dimensional parameters, such as nonparametric density
-estimation and prediction with both censored and uncensored data. Building on
-this work, his research group developed targeted maximum likelihood estimation
-for a target parameter of the data-generating distribution in arbitrary
-semiparametric and nonparametric models, as a generic optimal methodology for
-statistical and causal inference. Most recently, Mark's group has focused in
-part on the development of a centralized, principled set of software tools for
-targeted learning, the `tlverse`.
 
 ### Jeremy Coyle {-}
 
@@ -161,17 +134,6 @@ interventions. She is also working on an FDA-funded project led Dr. Susan
 Gruber, A Targeted Learning Framework for Causal Effect Estimation Using 
 Real-World Data. Rachael is an active contributor to the `hal9001` and `sl3` 
 R packages in the `tlverse`.
-
-### Alan Hubbard {-}
-
-Alan Hubbard is Professor of Biostatistics, former head of the Division of
-Biostatistics at UC Berkeley, and head of data analytics core at UC Berkeley's
-SuperFund research program. His current research interests include causal
-inference, variable importance analysis, statistical machine learning,
-estimation of and inference for data-adaptive statistical target parameters, and
-targeted minimum loss-based estimation. Research in his group is generally
-motivated by applications to problems in computational biology, epidemiology,
-and precision medicine.
 
 <!--
 # Acknowledgements {-}

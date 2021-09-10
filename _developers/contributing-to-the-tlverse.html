@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 9 Contributing to the tlverse | Developer’s Guide to the tlverse</title>
+<meta name="author" content="Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.8/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.9001/transition.js"></script><script src="libs/bs3compat-0.2.5.9001/tabs.js"></script><script src="libs/bs3compat-0.2.5.9001/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
+<script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
+</head>
+<body>
+<span class="math inline">
+    \(\DeclareMathOperator{\expit}{expit}\)
+    \(\DeclareMathOperator{\logit}{logit}\)
+    \(\DeclareMathOperator*{\argmin}{\arg\!\min}\)
+    \(\newcommand{\indep}{\perp\!\!\!\perp}\)
+    \(\newcommand{\coloneqq}{\mathrel{=}}\)
+    \(\newcommand{\R}{\mathbb{R}}\)
+    \(\newcommand{\E}{\mathbb{E}}\)
+    \(\newcommand{\M}{\mathcal{M}}\)
+    \(\renewcommand{\P}{\mathbb{P}}\)
+    \(\newcommand{\I}{\mathbb{I}}\)
+    \(\newcommand{\1}{\mathbbm{1}}\)
+    </span>
+    <script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS --><div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Developer’s Guide to the tlverse</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">About this book</a></li>
+<li><a class="" href="why-we-need-yet-another-targeted-learning-package.html"><span class="header-section-number">1</span> Why we need yet another Targeted Learning package</a></li>
+<li><a class="" href="tlverse.html"><span class="header-section-number">2</span> Welcome to the tlverse</a></li>
+<li><a class="" href="computation-graphs-with-delayed.html"><span class="header-section-number">3</span> Computation Graphs with delayed</a></li>
+<li><a class="" href="cross-validation-with-origami.html"><span class="header-section-number">4</span> Cross-validation with origami</a></li>
+<li><a class="" href="super-machine-learning-with-sl3.html"><span class="header-section-number">5</span> Super (Machine) Learning with sl3</a></li>
+<li><a class="" href="the-tmle-framework-with-tmle3.html"><span class="header-section-number">6</span> The TMLE Framework with tmle3</a></li>
+<li><a class="" href="monte-carlo-simulation-with-tmle3sim.html"><span class="header-section-number">7</span> Monte Carlo Simulation with tmle3sim</a></li>
+<li><a class="" href="highly-adaptive-lasso-with-hal9001.html"><span class="header-section-number">8</span> Highly Adaptive Lasso with hal9001</a></li>
+<li><a class="active" href="contributing-to-the-tlverse.html"><span class="header-section-number">9</span> Contributing to the tlverse</a></li>
+<li><a class="" href="ensuring-code-quality.html"><span class="header-section-number">10</span> Ensuring Code Quality</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/tlverse/tlverse-handbook">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="contributing-to-the-tlverse" class="section level1" number="9">
+<h1>
+<span class="header-section-number">9</span> Contributing to the <code>tlverse</code><a class="anchor" aria-label="anchor" href="#contributing-to-the-tlverse"><i class="fas fa-link"></i></a>
+</h1>
+<p><em>Jeremy Coyle</em></p>
+<p>TODO: generalize</p>
+<div id="submitting-your-learner-to-sl3" class="section level2" number="9.1">
+<h2>
+<span class="header-section-number">9.1</span> Submitting your Learner to <code>sl3</code><a class="anchor" aria-label="anchor" href="#submitting-your-learner-to-sl3"><i class="fas fa-link"></i></a>
+</h2>
+<p>Once you’ve implemented your new learner (and made sure that it has quality
+documentation and unit tests), please consider adding it to the <code>sl3</code> project.
+This will make it possible for other <code>sl3</code> users to use and build on your work.
+Make sure to add any R packages listed in <code>.required_packages</code> to the
+<code>Suggests:</code> field of the <code>DESCRIPTION</code> file of the <code>sl3</code> package. Once this is
+done, please submit a <strong>Pull Request</strong> to the <code>sl3</code> package <a href="https://github.com/tlverse/sl3">on
+GitHub</a> to request that your learned be
+added. If you’ve never made a “Pull Request” before, see this helpful
+guide: <a href="https://yangsu.github.io/pull-request-tutorial/" class="uri">https://yangsu.github.io/pull-request-tutorial/</a>.</p>
+<p>From the <code>tlverse</code> team, thanks for your interest in extending <code>tlverse</code>!</p>
+</div>
+<div id="contributing-to-sl3-development" class="section level2" number="9.2">
+<h2>
+<span class="header-section-number">9.2</span> Contributing to <code>sl3</code> development<a class="anchor" aria-label="anchor" href="#contributing-to-sl3-development"><i class="fas fa-link"></i></a>
+</h2>
+<p>We, the authors of the <code>sl3</code> R package, use the same guide as is used for
+contributing to the development of the popular <code>ggplot2</code> R package. This
+document is simply a formal re-statement of that fact.</p>
+<p>The goal of this guide is to help you get up and contributing to <code>sl3</code> as
+quickly as possible. The guide is divided into two main pieces:</p>
+<ul>
+<li>Filing a bug report or feature request in an issue.</li>
+<li>Suggesting a change via a pull request.</li>
+</ul>
+</div>
+<div id="issues" class="section level2" number="9.3">
+<h2>
+<span class="header-section-number">9.3</span> Issues<a class="anchor" aria-label="anchor" href="#issues"><i class="fas fa-link"></i></a>
+</h2>
+<p>When filing an issue, the most important thing is to include a minimal
+reproducible example so that we can quickly verify the problem, and then figure
+out how to fix it. There are three things you need to include to make your
+example reproducible: required packages, data, code.</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Packages</strong> should be loaded at the top of the script, so it’s easy to
+see which ones the example needs.</p></li>
+<li>
+<p>The easiest way to include <strong>data</strong> is to use <code><a href="https://rdrr.io/r/base/dput.html">dput()</a></code> to generate the R
+code to recreate it. For example, to recreate the <code>mtcars</code> dataset in R,
+I’d perform the following steps:</p>
+<ol style="list-style-type: decimal">
+<li>Run <code><a href="https://rdrr.io/r/base/dput.html">dput(mtcars)</a></code> in R</li>
+<li>Copy the output</li>
+<li>In my reproducible script, type <code>mtcars &lt;-</code> then paste.</li>
+</ol>
+<p>But even better is if you can create a <code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code> with just a handful
+of rows and columns that still illustrates the problem.</p>
+</li>
+<li>
+<p>Spend a little bit of time ensuring that your <strong>code</strong> is easy for others to
+read:</p>
+<ul>
+<li><p>make sure you’ve used spaces and your variable names are concise, but
+informative</p></li>
+<li><p>use comments to indicate where your problem lies</p></li>
+<li><p>do your best to remove everything that is not related to the problem.
+The shorter your code is, the easier it is to understand.</p></li>
+</ul>
+</li>
+</ol>
+<p>You can check you have actually made a reproducible example by starting up a
+fresh R session and pasting your script in.</p>
+<p>(Unless you’ve been specifically asked for it, please don’t include the output
+of <code><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo()</a></code>.)</p>
+</div>
+<div id="pull-requests" class="section level2" number="9.4">
+<h2>
+<span class="header-section-number">9.4</span> Pull requests<a class="anchor" aria-label="anchor" href="#pull-requests"><i class="fas fa-link"></i></a>
+</h2>
+<p>To contribute a change to <code>sl3</code>, you follow these steps:</p>
+<ol style="list-style-type: decimal">
+<li>Create a branch in git and make your changes.</li>
+<li>Push branch to github and issue pull request (PR).</li>
+<li>Discuss the pull request.</li>
+<li>Iterate until either we accept the PR or decide that it’s not a good fit for
+<code>sl3</code>.</li>
+</ol>
+<p>Each of these steps are described in more detail below. This might feel
+overwhelming the first time you get set up, but it gets easier with practice.</p>
+<p>If you’re not familiar with git or GitHub, please start by reading
+<a href="http://r-pkgs.had.co.nz/git.html" class="uri">http://r-pkgs.had.co.nz/git.html</a></p>
+<p>Pull requests will be evaluated against the a checklist:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Motivation</strong>. Your pull request should clearly and concisely motivates the
+need for change. Plesae describe the problem your PR addresses and show
+how your pull request solves it as concisely as possible.</li>
+</ol>
+<p>Also include this motivation in <code>NEWS</code> so that when a new release of
+ggplot2 comes out it’s easy for users to see what’s changed. Add your
+item at the top of the file and use markdown for formatting. The
+news item should end with <code>(@yourGithubUsername, #the_issue_number)</code>.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>
+<p><strong>Only related changes</strong>. Before you submit your pull request, please
+check to make sure that you haven’t accidentally included any unrelated
+changes. These make it harder to see exactly what’s changed, and to
+evaluate any unexpected side effects.</p>
+<p>Each PR corresponds to a git branch, so if you expect to submit
+multiple changes make sure to create multiple branches. If you have
+multiple changes that depend on each other, start with the first one
+and don’t submit any others until the first one has been processed.</p>
+</li>
+<li><p><strong>Use <code>sl3</code> coding style</strong>. Please follow the
+<a href="http://adv-r.had.co.nz/Style.html">official ggplot2 style</a>. Maintaing
+a consistent style across the whole code base makes it much easier to
+jump into the code. If you’re modifying existing ggplot2 code that
+doesn’t follow the style guide, a separate pull request to fix the
+style would be greatly appreciated.</p></li>
+<li><p>If you’re adding new parameters or a new function, you’ll also need
+to document them with <a href="https://github.com/klutometis/roxygen">roxygen</a>.
+Make sure to re-run <code>devtools::document()</code> on the code before submitting.</p></li>
+</ol>
+<p>This seems like a lot of work but don’t worry if your pull request isn’t
+perfect. It’s a learning process. A pull request is a process, and unless
+you’ve submitted a few in the past it’s unlikely that your pull request will be
+accepted as is. Please don’t submit pull requests that change existing
+behaviour. Instead, think about how you can add a new feature in a minimally
+invasive way.</p>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="highly-adaptive-lasso-with-hal9001.html"><span class="header-section-number">8</span> Highly Adaptive Lasso with hal9001</a></div>
+<div class="next"><a href="ensuring-code-quality.html"><span class="header-section-number">10</span> Ensuring Code Quality</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#contributing-to-the-tlverse"><span class="header-section-number">9</span> Contributing to the tlverse</a></li>
+<li><a class="nav-link" href="#submitting-your-learner-to-sl3"><span class="header-section-number">9.1</span> Submitting your Learner to sl3</a></li>
+<li><a class="nav-link" href="#contributing-to-sl3-development"><span class="header-section-number">9.2</span> Contributing to sl3 development</a></li>
+<li><a class="nav-link" href="#issues"><span class="header-section-number">9.3</span> Issues</a></li>
+<li><a class="nav-link" href="#pull-requests"><span class="header-section-number">9.4</span> Pull requests</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/tlverse/tlverse-handbook/blob/master/100-contribution.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/tlverse/tlverse-handbook/edit/master/100-contribution.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Developer’s Guide to the tlverse</strong>" was written by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on September 10, 2021.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+</html>

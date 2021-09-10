@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 2 Welcome to the tlverse | Developer’s Guide to the tlverse</title>
+<meta name="author" content="Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.8/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.9001/transition.js"></script><script src="libs/bs3compat-0.2.5.9001/tabs.js"></script><script src="libs/bs3compat-0.2.5.9001/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
+<script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
+</head>
+<body>
+<span class="math inline">
+    \(\DeclareMathOperator{\expit}{expit}\)
+    \(\DeclareMathOperator{\logit}{logit}\)
+    \(\DeclareMathOperator*{\argmin}{\arg\!\min}\)
+    \(\newcommand{\indep}{\perp\!\!\!\perp}\)
+    \(\newcommand{\coloneqq}{\mathrel{=}}\)
+    \(\newcommand{\R}{\mathbb{R}}\)
+    \(\newcommand{\E}{\mathbb{E}}\)
+    \(\newcommand{\M}{\mathcal{M}}\)
+    \(\renewcommand{\P}{\mathbb{P}}\)
+    \(\newcommand{\I}{\mathbb{I}}\)
+    \(\newcommand{\1}{\mathbbm{1}}\)
+    </span>
+    <script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS --><div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Developer’s Guide to the tlverse</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">About this book</a></li>
+<li><a class="" href="why-we-need-yet-another-targeted-learning-package.html"><span class="header-section-number">1</span> Why we need yet another Targeted Learning package</a></li>
+<li><a class="active" href="tlverse.html"><span class="header-section-number">2</span> Welcome to the tlverse</a></li>
+<li><a class="" href="computation-graphs-with-delayed.html"><span class="header-section-number">3</span> Computation Graphs with delayed</a></li>
+<li><a class="" href="cross-validation-with-origami.html"><span class="header-section-number">4</span> Cross-validation with origami</a></li>
+<li><a class="" href="super-machine-learning-with-sl3.html"><span class="header-section-number">5</span> Super (Machine) Learning with sl3</a></li>
+<li><a class="" href="the-tmle-framework-with-tmle3.html"><span class="header-section-number">6</span> The TMLE Framework with tmle3</a></li>
+<li><a class="" href="monte-carlo-simulation-with-tmle3sim.html"><span class="header-section-number">7</span> Monte Carlo Simulation with tmle3sim</a></li>
+<li><a class="" href="highly-adaptive-lasso-with-hal9001.html"><span class="header-section-number">8</span> Highly Adaptive Lasso with hal9001</a></li>
+<li><a class="" href="contributing-to-the-tlverse.html"><span class="header-section-number">9</span> Contributing to the tlverse</a></li>
+<li><a class="" href="ensuring-code-quality.html"><span class="header-section-number">10</span> Ensuring Code Quality</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/tlverse/tlverse-handbook">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="tlverse" class="section level1" number="2">
+<h1>
+<span class="header-section-number">2</span> Welcome to the <code>tlverse</code><a class="anchor" aria-label="anchor" href="#tlverse"><i class="fas fa-link"></i></a>
+</h1>
+<p>Updated: 2021-09-10</p>
+<div id="learning-objectives" class="section level2 unnumbered">
+<h2>Learning Objectives<a class="anchor" aria-label="anchor" href="#learning-objectives"><i class="fas fa-link"></i></a>
+</h2>
+<p>This chapter introduces the <code>tlverse</code> software ecosystem, including</p>
+<ol style="list-style-type: decimal">
+<li>Understanding the <code>tlverse</code> ecosystem conceptually.</li>
+<li>Identifying the core components of the <code>tlverse</code>.</li>
+<li>Installing <code>tlverse</code> <code>R</code> packages.</li>
+<li>Understanding the Targeted Learning roadmap.</li>
+<li>Learning about the WASH Benefits example data.</li>
+</ol>
+</div>
+<div id="what-is-the-tlverse" class="section level2 unnumbered">
+<h2>What is the <code>tlverse</code>?<a class="anchor" aria-label="anchor" href="#what-is-the-tlverse"><i class="fas fa-link"></i></a>
+</h2>
+<p>The <code>tlverse</code> is a new framework for doing Targeted Learning in R, inspired by
+the <a href="https://tidyverse.org"><code>tidyverse</code> ecosystem</a> of R packages.</p>
+<p>By analogy to the <a href="https://tidyverse.org/"><code>tidyverse</code></a>:</p>
+<blockquote>
+<p>The <code>tidyverse</code> is an opinionated collection of R packages designed for data
+science. All packages share an underlying design philosophy, grammar, and data
+structures.</p>
+</blockquote>
+<p>So, the <a href="https://tlverse.org"><code>tlverse</code></a> is</p>
+<ul>
+<li>an opinionated collection of R packages for Targeted Learning</li>
+<li>sharing an underlying philosophy, grammar, and set of data structures</li>
+</ul>
+</div>
+<div id="anatomy-of-the-tlverse" class="section level2 unnumbered">
+<h2>Anatomy of the <code>tlverse</code><a class="anchor" aria-label="anchor" href="#anatomy-of-the-tlverse"><i class="fas fa-link"></i></a>
+</h2>
+<p>All Targeted Learning methods are targeted maximum likelihood (or minimum
+loss-based) estimators (TMLEs). The construction of any Targeted Learning
+estimator proceeds through a two-stage process:</p>
+<ol style="list-style-type: decimal">
+<li>Flexibly learning particular components of the data-generating distribution
+through macchine learning (e.g., Super Learning), resulting in <em>initial
+estimates</em> of nuisance parameters.</li>
+<li>Use of a parametric model-based update via maximum likelihood estimation
+(i.e., MLE), incorporating the initial estimates produced by the prior step.</li>
+</ol>
+<p>The packages making up the core components of the <code>tlverse</code> software ecosystem,
+<code>sl3</code> and <code>tmle3</code>, address the above two goals, respectively. Together, the very
+general functionality exposed by both allows one to build specific TMLEs
+tailored exactly to a particular estimation problem.</p>
+<p>The software packages that make up the <strong>core</strong> of the <code>tlverse</code> are</p>
+<ul>
+<li>
+<a href="https://github.com/tlverse/sl3"><code>sl3</code></a>: Modern Super Machine Learning
+<ul>
+<li>
+<em>What?</em> A modern object-oriented re-implementation of the Super Learner
+algorithm, employing recently developed paradigms in <code>R</code> programming.</li>
+<li>
+<em>Why?</em> A design that leverages modern ideas for faster computation, is
+easily extensible and forward-looking, and forms one of the cornerstones of
+the <code>tlverse</code>.</li>
+</ul>
+</li>
+<li>
+<a href="https://github.com/tlverse/tmle3"><code>tmle3</code></a>: An Engine for Targeted Learning
+<ul>
+<li>
+<em>What?</em> A generalized framework that simplifies Targeted Learning by
+identifying and implementing a series of common statistical estimation
+procedures.</li>
+<li>
+<em>Why?</em> A common interface and engine that accommodates current algorithmic
+approaches to Targeted Learning and yet remains a flexible enough engine to
+power the implementation of emerging statistical techniques as they are
+developed.</li>
+</ul>
+</li>
+</ul>
+<p>Beyond these engines that provide the driving force behind the <code>tlverse</code>, there
+are a few supporting packages that play important roles in the background:</p>
+<ul>
+<li>
+<a href="https://github.com/tlverse/origami"><code>origami</code></a>: A Generalized Framework for
+Cross-Validation <span class="citation">(<a href="references.html#ref-coyle2018origami" role="doc-biblioref">Coyle and Hejazi 2018</a>)</span>
+<ul>
+<li>
+<em>What?</em> A generalized framework for flexible cross-validation.</li>
+<li>
+<em>Why?</em> Cross-validation is a key part of ensuring error estimates are honest
+and in preventing overfitting. It is an essential part of the both the Super
+Learner ensemble modeling algorithm and in the construction of Targeted
+Learning estimators.</li>
+</ul>
+</li>
+<li>
+<a href="https://github.com/tlverse/delayed"><code>delayed</code></a>: Parallelization Framework for
+Dependent Tasks
+<ul>
+<li>
+<em>What?</em> A framework for delayed computations (i.e., futures) based on task
+dependencies.</li>
+<li>
+<em>Why?</em> Efficient allocation of compute resources is essential when deploying
+computationally intensive algorithms at large scale.</li>
+</ul>
+</li>
+</ul>
+<p>A key principle of the <code>tlverse</code> is extensibility. That is, the software
+ecosystem aims to support the development of new Targeted Learning estimators as
+they reaching maturity. To achieve this degree of flexibility, we follow the
+model of implementing new classes of estimators, for distinct causal inference
+problems, in separate packages, all of which use the core machinery provided by
+the <code>sl3</code> and <code>tmle3</code> packages There are currently three examples:</p>
+<ul>
+<li>
+<a href="https://github.com/tlverse/tmle3mopttx"><code>tmle3mopttx</code></a>: Optimal Treatments
+in the <code>tlverse</code>
+<ul>
+<li>
+<em>What?</em> Learn an optimal rule and estimate the mean outcome under the rule.</li>
+<li>
+<em>Why?</em> Optimal treatments are a powerful tool in precision healthcare and
+other settings where a one-size-fits-all treatment approach is not
+appropriate.</li>
+</ul>
+</li>
+<li>
+<a href="https://github.com/tlverse/tmle3shift"><code>tmle3shift</code></a>: Stochastic Shift
+Interventions in the <code>tlverse</code>
+<ul>
+<li>
+<em>What?</em> Stochastic shift interventions for continuous-valued treatments.</li>
+<li>
+<em>Why?</em> Not all treatment variables are binary or categorical. Estimating the
+total effects of intervening on continuous-valued treatments provides a way
+to probe how an effect changes with shifts in the treatment variable.</li>
+</ul>
+</li>
+<li>
+<a href="https://github.com/tlverse/tmle3mediate"><code>tmle3mediate</code></a>: Causal Mediation
+Analysis in the <code>tlverse</code>
+<ul>
+<li>
+<em>What?</em> Techniques for evaluating the direct and indirect effects of
+treatments through mediating variables.</li>
+<li>
+<em>Why?</em> Evaluating the total effect of a treatment does not provide
+information about the pathways through which it may operate. When mediating
+variables have been collected, one can instead evaluate direct and indirect
+effect parameters that speak to the <em>action mechanism</em> of the treatment.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="installtlverse" class="section level2" number="2.1">
+<h2>
+<span class="header-section-number">2.1</span> Installation<a class="anchor" aria-label="anchor" href="#installtlverse"><i class="fas fa-link"></i></a>
+</h2>
+<p>The <code>tlverse</code> ecosystem of packages are currently hosted at
+<a href="https://github.com/tlverse" class="uri">https://github.com/tlverse</a>, not yet on <a href="https://CRAN.R-project.org/">CRAN</a>. You
+can use the <a href="https://usethis.r-lib.org/"><code>usethis</code> package</a> to install them:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"tlverse/tlverse"</span><span class="op">)</span></code></pre></div>
+<p>The <code>tlverse</code> depends on a large number of other packages that are also hosted
+on GitHub. Because of this, you may see the following error:</p>
+<pre><code>Error: HTTP error 403.
+  API rate limit exceeded for 71.204.135.82. (But here's the good news:
+  Authenticated requests get a higher rate limit. Check out the documentation
+  for more details.)
+
+  Rate limit remaining: 0/60
+  Rate limit reset at: 2019-03-04 19:39:05 UTC
+
+  To increase your GitHub API rate limit
+  - Use `usethis::browse_github_pat()` to create a Personal Access Token.
+  - Use `usethis::edit_r_environ()` and add the token as `GITHUB_PAT`.</code></pre>
+<p>This just means that R tried to install too many packages from GitHub in too
+short of a window. To fix this, you need to tell R how to use GitHub as your
+user (you’ll need a GitHub user account). Follow these two steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>Type <code>usethis::browse_github_pat()</code> in your R console, which will direct
+you to GitHub’s page to create a New Personal Access Token (PAT).</p></li>
+<li><p>Create a PAT simply by clicking “Generate token” at the bottom of the page.</p></li>
+<li><p>Copy your PAT, a long string of lowercase letters and numbers.</p></li>
+<li>
+<p>Type <code>usethis::edit_r_environ()</code> in your R console, which will open your
+<code>.Renviron</code> file in the source window of RStudio.</p>
+<ol style="list-style-type: lower-alpha">
+<li>If your <code>.Renviron</code> file does not pop-up after calling
+<code>usethis::edit_r_environ()</code>; then try inputting
+<code><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv(GITHUB_PAT = "yourPAT")</a></code>, replacing your PAT with inside the
+quotes. If this does not error, then skip to step 8.</li>
+</ol>
+</li>
+<li><p>In your <code>.Renviron</code> file, type <code>GITHUB_PAT=</code> and then paste your PAT after
+the equals symbol with no space.</p></li>
+<li><p>In your <code>.Renviron</code> file, press the enter key to ensure that your <code>.Renviron</code>
+ends with a new line.</p></li>
+<li><p>Save your <code>.Renviron</code> file. The example below shows how this syntax should
+look.</p></li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">GITHUB_PAT</span> <span class="op">&lt;-</span> <span class="va">yourPAT</span></code></pre></div>
+<ol start="8" style="list-style-type: decimal">
+<li>Restart R. You can restart R via the drop-down menu on RStudio’s “Session”
+tab, which is located at the top of the RStudio interface. You have to
+restart R for the changes to take effect!</li>
+</ol>
+<p>After following these steps, you should be able to successfully install the
+package which threw the error above.</p>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="why-we-need-yet-another-targeted-learning-package.html"><span class="header-section-number">1</span> Why we need yet another Targeted Learning package</a></div>
+<div class="next"><a href="computation-graphs-with-delayed.html"><span class="header-section-number">3</span> Computation Graphs with delayed</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#tlverse"><span class="header-section-number">2</span> Welcome to the tlverse</a></li>
+<li><a class="nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li><a class="nav-link" href="#what-is-the-tlverse">What is the tlverse?</a></li>
+<li><a class="nav-link" href="#anatomy-of-the-tlverse">Anatomy of the tlverse</a></li>
+<li><a class="nav-link" href="#installtlverse"><span class="header-section-number">2.1</span> Installation</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/tlverse/tlverse-handbook/blob/master/020-tlverse.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/tlverse/tlverse-handbook/edit/master/020-tlverse.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Developer’s Guide to the tlverse</strong>" was written by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on September 10, 2021.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+</html>

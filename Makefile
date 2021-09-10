@@ -4,6 +4,9 @@ all: style book code
 book:
 	bash ./_build.sh
 
+html:
+	Rscript -e "bookdown::render_book('index.Rmd', quiet = FALSE)"
+
 pdf:
 	Rscript -e "bookdown::clean_book(TRUE)"
 	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::pdf_book')"

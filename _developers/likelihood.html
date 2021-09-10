@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 25 Likelihood | Developer’s Guide to the tlverse</title>
+<meta name="author" content="Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.8/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.9001/transition.js"></script><script src="libs/bs3compat-0.2.5.9001/tabs.js"></script><script src="libs/bs3compat-0.2.5.9001/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
+<script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
+</head>
+<body>
+<span class="math inline">
+    \(\DeclareMathOperator{\expit}{expit}\)
+    \(\DeclareMathOperator{\logit}{logit}\)
+    \(\DeclareMathOperator*{\argmin}{\arg\!\min}\)
+    \(\newcommand{\indep}{\perp\!\!\!\perp}\)
+    \(\newcommand{\coloneqq}{\mathrel{=}}\)
+    \(\newcommand{\R}{\mathbb{R}}\)
+    \(\newcommand{\E}{\mathbb{E}}\)
+    \(\newcommand{\M}{\mathcal{M}}\)
+    \(\renewcommand{\P}{\mathbb{P}}\)
+    \(\newcommand{\I}{\mathbb{I}}\)
+    \(\newcommand{\1}{\mathbbm{1}}\)
+    </span>
+    <script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS --><div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Developer’s Guide to the tlverse</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">About this book</a></li>
+<li><a class="" href="why-we-need-yet-another-targeted-learning-package.html"><span class="header-section-number">1</span> Why we need yet another Targeted Learning package</a></li>
+<li><a class="" href="tlverse.html"><span class="header-section-number">2</span> Welcome to the tlverse</a></li>
+<li><a class="" href="computation-graphs-with-delayed.html"><span class="header-section-number">3</span> Computation Graphs with delayed</a></li>
+<li><a class="" href="intro.html"><span class="header-section-number">4</span> Intro</a></li>
+<li><a class="" href="architecture.html"><span class="header-section-number">5</span> Architecture</a></li>
+<li><a class="" href="other.html"><span class="header-section-number">6</span> Other</a></li>
+<li><a class="" href="previous-documentation.html"><span class="header-section-number">7</span> Previous Documentation</a></li>
+<li><a class="" href="cross-validation-with-origami.html"><span class="header-section-number">8</span> Cross-validation with origami</a></li>
+<li><a class="" href="intro-1.html"><span class="header-section-number">9</span> Intro</a></li>
+<li><a class="" href="architecture-1.html"><span class="header-section-number">10</span> Architecture</a></li>
+<li><a class="" href="other-1.html"><span class="header-section-number">11</span> Other</a></li>
+<li><a class="" href="previous-documentation-1.html"><span class="header-section-number">12</span> Previous Documentation</a></li>
+<li><a class="" href="super-machine-learning-with-sl3.html"><span class="header-section-number">13</span> Super (Machine) Learning with sl3</a></li>
+<li><a class="" href="intro-2.html"><span class="header-section-number">14</span> Intro</a></li>
+<li><a class="" href="architecture-2.html"><span class="header-section-number">15</span> Architecture</a></li>
+<li><a class="" href="other-2.html"><span class="header-section-number">16</span> Other</a></li>
+<li><a class="" href="previous-documentation-2.html"><span class="header-section-number">17</span> Previous Documentation</a></li>
+<li><a class="" href="the-tmle-framework-with-tmle3.html"><span class="header-section-number">18</span> The TMLE Framework with tmle3</a></li>
+<li><a class="" href="intro-3.html"><span class="header-section-number">19</span> Intro</a></li>
+<li><a class="" href="architecture-3.html"><span class="header-section-number">20</span> Architecture</a></li>
+<li><a class="" href="other-3.html"><span class="header-section-number">21</span> Other</a></li>
+<li><a class="" href="previous-documentation-3.html"><span class="header-section-number">22</span> Previous documentation</a></li>
+<li><a class="" href="introduction-1.html"><span class="header-section-number">23</span> Introduction</a></li>
+<li><a class="" href="npsem.html"><span class="header-section-number">24</span> NPSEM</a></li>
+<li><a class="active" href="likelihood.html"><span class="header-section-number">25</span> Likelihood</a></li>
+<li><a class="" href="update-procedure.html"><span class="header-section-number">26</span> Update Procedure</a></li>
+<li><a class="" href="update-procedure-1.html"><span class="header-section-number">27</span> Update Procedure</a></li>
+<li><a class="" href="target-parameter.html"><span class="header-section-number">28</span> Target Parameter</a></li>
+<li><a class="" href="tmle3_fit---putting-it-all-together.html"><span class="header-section-number">29</span> tmle3_Fit - Putting it all together</a></li>
+<li><a class="" href="tmle-specification.html"><span class="header-section-number">30</span> TMLE Specification</a></li>
+<li><a class="" href="conclusion.html"><span class="header-section-number">31</span> Conclusion</a></li>
+<li><a class="" href="monte-carlo-simulation-with-tmle3sim.html"><span class="header-section-number">32</span> Monte Carlo Simulation with tmle3sim</a></li>
+<li><a class="" href="intro-4.html"><span class="header-section-number">33</span> Intro</a></li>
+<li><a class="" href="architecture-4.html"><span class="header-section-number">34</span> Architecture</a></li>
+<li><a class="" href="other-4.html"><span class="header-section-number">35</span> Other</a></li>
+<li><a class="" href="previous-documentation-4.html"><span class="header-section-number">36</span> Previous Documentation</a></li>
+<li><a class="" href="highly-adaptive-lasso-with-hal9001.html"><span class="header-section-number">37</span> Highly Adaptive Lasso with hal9001</a></li>
+<li><a class="" href="intro-5.html"><span class="header-section-number">38</span> Intro</a></li>
+<li><a class="" href="architecture-5.html"><span class="header-section-number">39</span> Architecture</a></li>
+<li><a class="" href="other-5.html"><span class="header-section-number">40</span> Other</a></li>
+<li><a class="" href="previous-documentation-5.html"><span class="header-section-number">41</span> Previous Documentation</a></li>
+<li><a class="" href="todo-port-documentation-from-httpsgithub.comtlversehal9001blobmastervignettesintro_hal9001.rmd.html"><span class="header-section-number">42</span> TODO: port documentation from https://github.com/tlverse/hal9001/blob/master/vignettes/intro_hal9001.Rmd</a></li>
+<li><a class="" href="contributing-to-the-tlverse.html"><span class="header-section-number">43</span> Contributing to the tlverse</a></li>
+<li><a class="" href="contributing-to-sl3-development.html"><span class="header-section-number">44</span> Contributing to sl3 development</a></li>
+<li><a class="" href="ensuring-code-quality.html"><span class="header-section-number">45</span> Ensuring Code Quality</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/tlverse/tlverse-handbook">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="likelihood" class="section level1" number="25">
+<h1>
+<span class="header-section-number">25</span> Likelihood<a class="anchor" aria-label="anchor" href="#likelihood"><i class="fas fa-link"></i></a>
+</h1>
+<p>Having defined the NPSEM, we can now define a joint likelihood (probability
+density function) over the observed variables <span class="math inline">\(X\)</span>:</p>
+<p><span class="math display">\[P(X_1, \ldots, X_J \in D) = \int_D f_{X_1, \ldots, X_J}(x_1, \ldots, x_J)
+dx_1, \ldots, dx_J\]</span></p>
+<p>This can then be factorized into a series of conditional densities according to
+the NPSEM:
+<span class="math display">\[f_{X_1, \ldots, X_J} = \prod_j^J f_{X_j \mid Pa(X_j)}(x \mid Pa(x_j))\]</span></p>
+<p>Where each <span class="math inline">\(f_{X_j \mid Pa(X_j)}\)</span> is a conditional pdf (or probability mass
+function for discrete <span class="math inline">\(X_j\)</span>), where the conditioning set is all parent nodes as
+defined in the NPSEM. We refer to these objects as <em>likelihood factors</em>.</p>
+<p>TMLE depends on estimates (or <em>a priori</em> knowledge) of the functional form of
+these likelihood factors. However, not all factors of the likelihood are always
+necessary for estimation, and only those necessary will be estimated.</p>
+<div id="likelihood-factor-objects" class="section level3" number="25.0.1">
+<h3>
+<span class="header-section-number">25.0.1</span> Likelihood Factor Objects<a class="anchor" aria-label="anchor" href="#likelihood-factor-objects"><i class="fas fa-link"></i></a>
+</h3>
+<p><code>tmle3</code> models this likelihood as a list of likelihood factor objects, where
+each likelihood factor object describes either <em>a priori</em> knowledge or an
+estimation strategy for the corresponding likelihood factor. These objects all
+inherit from the <code>LF_base</code> base class, and there are different types depending
+on which of a range of estimation strategies or <em>a priori</em> knowledge is
+appropriate.</p>
+<p>In some cases, a full conditional density for a particular factor is not
+necessary. Instead, a conditional mean – a much easier quantity to estimate –
+is all that’s required. Although conditional means are not truly likelihood
+factors, conditional means are also modeled using using likelihood factor
+objects.</p>
+</div>
+<div id="lf_emp" class="section level3" number="25.0.2">
+<h3>
+<span class="header-section-number">25.0.2</span> <code>LF_emp</code><a class="anchor" aria-label="anchor" href="#lf_emp"><i class="fas fa-link"></i></a>
+</h3>
+<p><code>LF_emp</code> represents a likelihood factor to be estimated using nonparametric
+maximum likelihood estimation (NP-MLE). That is, probability mass <span class="math inline">\(\frac{1}{n}\)</span>
+is placed on each observation in the observed dataset:</p>
+<p><span class="math display">\[f_{X_j}(x_j) = \frac{1}{n}\mathbb{I}(x_j \in X_{n,j})\]</span></p>
+<p>Going forward, weights will be used if specified, although this is not yet
+supported. <code>LF_emp</code> only supports marginal densities. That is, the conditioning
+set, <span class="math inline">\(Pa(X_j)\)</span> must be empty. Therefore, it is only appropriate for estimation
+of the marginal density of baseline covariates.</p>
+</div>
+<div id="lf_fit" class="section level3" number="25.0.3">
+<h3>
+<span class="header-section-number">25.0.3</span> <code>LF_fit</code><a class="anchor" aria-label="anchor" href="#lf_fit"><i class="fas fa-link"></i></a>
+</h3>
+<p><code>LF_fit</code> represents a likelihood factor to be estimated using the <code>sl3</code>
+framework. Based on the learner type used, this can fit a pmf (for binomial or
+categorical data, see <code><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_learners("binomial")</a></code> and
+<code><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_learners("categorical")</a></code> for lists), a conditional mean (most
+learners), or a conditional density (e.g., using a semiparametric conditional
+density estimator via <code>Lrnr_density_semiparametric</code>). <code>LF_fit</code> takes a <code>sl3</code>
+learner object as an argument, which is fit to the data in the <code>tmle3_Task</code>
+automatically. Details for specifying different kinds of learners in <code>sl3</code> may
+be found at <a href="http://tlverse.org/sl3/articles/intro_sl3.html" class="uri">http://tlverse.org/sl3/articles/intro_sl3.html</a></p>
+</div>
+<div id="specifying-a-priori-knowledge." class="section level3" number="25.0.4">
+<h3>
+<span class="header-section-number">25.0.4</span> Specifying <em>a priori</em> knowledge.<a class="anchor" aria-label="anchor" href="#specifying-a-priori-knowledge."><i class="fas fa-link"></i></a>
+</h3>
+<p>The above to likelihood factor types, <code>LF_fit</code>, and <code>LF_emp</code>, are both
+likelihood factors where the factor is estimated from data. In some cases, users
+may have <em>a priori</em> knowledge of a likelihood factor. For instance, in an RCT,
+there might be an unconditional probability of treatment of <span class="math inline">\(p = 0.5\)</span>.
+Additional likelihood factor types need to be create to accommodate this type of
+knowledge.</p>
+</div>
+<div id="example-2" class="section level3" number="25.0.5">
+<h3>
+<span class="header-section-number">25.0.5</span> Example<a class="anchor" aria-label="anchor" href="#example-2"><i class="fas fa-link"></i></a>
+</h3>
+<p>Going back to our CPP data example, we will estimate the marginal likelihood of
+<span class="math inline">\(W\)</span>, using NP-MLE, the conditional density of <span class="math inline">\(A\)</span> given <span class="math inline">\(W\)</span> using a GLM fit via
+<code>sl3</code> and the conditional mean of <span class="math inline">\(Y\)</span> given <span class="math inline">\(A\)</span> and <span class="math inline">\(W\)</span> using another GLM fit
+via <code>sl3</code>:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># set up sl3 learners for tmle3 fit</span>
+<span class="va">lrnr_glm_fast</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_glm_fast</span><span class="op">)</span>
+<span class="va">lrnr_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_mean</span><span class="op">)</span>
+
+<span class="co"># define and fit likelihood</span>
+<span class="va">factor_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="fu"><a href="http://tlverse.org/tmle3/reference/define_lf.html">define_lf</a></span><span class="op">(</span><span class="va">LF_emp</span>, <span class="st">"W"</span><span class="op">)</span>,
+  <span class="fu"><a href="http://tlverse.org/tmle3/reference/define_lf.html">define_lf</a></span><span class="op">(</span><span class="va">LF_fit</span>, <span class="st">"A"</span>, <span class="va">lrnr_glm_fast</span><span class="op">)</span>,
+  <span class="fu"><a href="http://tlverse.org/tmle3/reference/define_lf.html">define_lf</a></span><span class="op">(</span><span class="va">LF_fit</span>, <span class="st">"Y"</span>, <span class="va">lrnr_glm_fast</span>, type<span class="op">=</span><span class="st">"mean"</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<p>The particular likelihood factors and estimation strategies to use will of
+course depend on the parameter of interest. Once this list of likelihood factors
+is defined, we can construct a <code>Likelihood</code> object and train it on the data
+contained in <code>tmle_task</code>:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">likelihood_def</span> <span class="op">&lt;-</span> <span class="va"><a href="http://tlverse.org/tmle3/reference/Likelihood.html">Likelihood</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">factor_list</span><span class="op">)</span>
+<span class="va">likelihood</span> <span class="op">&lt;-</span> <span class="va">likelihood_def</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">tmle_task</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">likelihood</span><span class="op">)</span>
+<span class="va">W</span><span class="op">:</span> <span class="va">Lf_emp</span>
+<span class="va">A</span><span class="op">:</span> <span class="va">LF_fit</span>
+<span class="va">Y</span><span class="op">:</span> <span class="va">LF_fit</span></code></pre></div>
+<p>A <code>tmle3</code> <code>Likelihood</code> is actually a special type of <code>sl3</code> learner, so the
+syntax to train it on data is analogous.</p>
+<p>Having fit the likelihood, we can now get likelihood values for any
+<code>tmle3_Task</code>:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="likelihood.html#cb19-1" aria-hidden="true" tabindex="-1"></a>likelihood_values <span class="ot">&lt;-</span> likelihood<span class="sc">$</span><span class="fu">get_likelihoods</span>(tmle_task,<span class="st">"Y"</span>)</span>
+<span id="cb19-2"><a href="likelihood.html#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(likelihood_values)</span>
+<span id="cb19-3"><a href="likelihood.html#cb19-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">0.57930</span> <span class="fl">0.57930</span> <span class="fl">0.69095</span> <span class="fl">0.69095</span> <span class="fl">0.69095</span> <span class="fl">0.45234</span></span></code></pre></div>
+</div>
+<div id="counterfactual-likelihoods" class="section level2" number="25.1">
+<h2>
+<span class="header-section-number">25.1</span> Counterfactual Likelihoods<a class="anchor" aria-label="anchor" href="#counterfactual-likelihoods"><i class="fas fa-link"></i></a>
+</h2>
+<p>In <code>tmle3</code>, interventions are modeled by likelihoods where one or more
+likelihood factors is replaced with a counterfactual version representing some
+intervention.</p>
+<p><code>tmle3</code> defines the <code>CF_Likelihood</code> class, which inherits from <code>Likelihood</code>, and
+takes an <code>observed_likelihood</code> and an <code>intervention_list</code>.</p>
+<p>Below, we describe some examples of additional likelihood factors intended to be
+used to describe interventions. We expect this list to grow as <code>tmle3</code> is
+extended to additional use-cases.</p>
+<div id="lf_static" class="section level3" number="25.1.1">
+<h3>
+<span class="header-section-number">25.1.1</span> <code>LF_static</code><a class="anchor" aria-label="anchor" href="#lf_static"><i class="fas fa-link"></i></a>
+</h3>
+<p>Likelihood factor for a static intervention, where all observations are set do a
+single intervention value <span class="math inline">\(x'\)</span>:</p>
+<p><span class="math display">\[f_{X_j \mid Pa(X_j)}(x_j \mid Pa(x_j)) = \mathbf{I}(x_j = x')\]</span></p>
+</div>
+<div id="other-intervention-likelihood-factor-types" class="section level3" number="25.1.2">
+<h3>
+<span class="header-section-number">25.1.2</span> Other intervention likelihood factor types<a class="anchor" aria-label="anchor" href="#other-intervention-likelihood-factor-types"><i class="fas fa-link"></i></a>
+</h3>
+<p>Additional likelihood factor types need to be defined for other types of
+interventions, such as dynamic rules and stochastic interventions. Currently, a
+prototype version of a stochastic shift intervention exists in <code>LF_shift</code>.</p>
+</div>
+<div id="example-3" class="section level3" number="25.1.3">
+<h3>
+<span class="header-section-number">25.1.3</span> Example<a class="anchor" aria-label="anchor" href="#example-3"><i class="fas fa-link"></i></a>
+</h3>
+<p>For our CPP example, we’ll define a simple intervention where we set all
+treatment <span class="math inline">\(A = 1\)</span>:</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">intervention</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://tlverse.org/tmle3/reference/define_lf.html">define_lf</a></span><span class="op">(</span><span class="va">LF_static</span>, <span class="st">"A"</span>, value <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<p>We can then use this to construct a counterfactual likelihood:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cf_likelihood</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://tlverse.org/tmle3/reference/CF_Likelihood.html">make_CF_Likelihood</a></span><span class="op">(</span><span class="va">likelihood</span>, <span class="va">intervention</span><span class="op">)</span></code></pre></div>
+<p>A <code>cf_likelihood</code> is a likelihood object, and so has the same behavior as the
+observed likelihood object defined above, but with the observed likelihood
+factors being replaced by the defined intervention likelihood factors.</p>
+<p>In particular, we can get likelihood values under the counterfactual likelihood:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="likelihood.html#cb22-1" aria-hidden="true" tabindex="-1"></a>cf_likelihood_values <span class="ot">&lt;-</span> cf_likelihood<span class="sc">$</span><span class="fu">get_likelihoods</span>(tmle_task, <span class="st">"A"</span>)</span>
+<span id="cb22-2"><a href="likelihood.html#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cf_likelihood_values)</span>
+<span id="cb22-3"><a href="likelihood.html#cb22-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">1</span> <span class="dv">1</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">1</span></span></code></pre></div>
+<p>We see that the likelihood values for the <span class="math inline">\(A\)</span> node are all either 0 or 1, as
+would be expected from an indicator likelihood function. In addition, the
+likelihood values for the non-intervention nodes have not changed.</p>
+</div>
+<div id="counterfactual-tasks" class="section level3" number="25.1.4">
+<h3>
+<span class="header-section-number">25.1.4</span> Counterfactual Tasks<a class="anchor" aria-label="anchor" href="#counterfactual-tasks"><i class="fas fa-link"></i></a>
+</h3>
+<p>Each <code>CF_Likelihood</code> can generate one or more counterfactual tasks. These are
+<code>tmle3_Task</code>s in which observed values are replaced with counterfactual values
+according to the specified intervention distribution. For deterministic
+interventions, only one task will be generated. However, stochastic
+interventions, when implemented, will generate several such tasks, one for each
+combination of possible values of the intervention node(s).</p>
+<p>To enumerate these tasks, use <code>enumerate_cf_tasks</code>:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="likelihood.html#cb23-1" aria-hidden="true" tabindex="-1"></a>cf_likelihood_tasks <span class="ot">&lt;-</span> cf_likelihood<span class="sc">$</span><span class="fu">enumerate_cf_tasks</span>(tmle_task)</span>
+<span id="cb23-2"><a href="likelihood.html#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cf_likelihood_tasks[[<span class="dv">1</span>]]<span class="sc">$</span>data)</span>
+<span id="cb23-3"><a href="likelihood.html#cb23-3" aria-hidden="true" tabindex="-1"></a>   apgar1 apgar5 gagebrth mage meducyrs sexn parity01 haz01</span>
+<span id="cb23-4"><a href="likelihood.html#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span>      <span class="dv">8</span>      <span class="dv">9</span>      <span class="dv">287</span>   <span class="dv">21</span>       <span class="dv">12</span>    <span class="dv">1</span>        <span class="dv">1</span>     <span class="dv">1</span></span>
+<span id="cb23-5"><a href="likelihood.html#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span>      <span class="dv">8</span>      <span class="dv">9</span>      <span class="dv">287</span>   <span class="dv">21</span>       <span class="dv">12</span>    <span class="dv">1</span>        <span class="dv">1</span>     <span class="dv">1</span></span>
+<span id="cb23-6"><a href="likelihood.html#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span><span class="sc">:</span>      <span class="dv">8</span>      <span class="dv">9</span>      <span class="dv">280</span>   <span class="dv">15</span>        <span class="dv">0</span>    <span class="dv">1</span>        <span class="dv">1</span>     <span class="dv">1</span></span>
+<span id="cb23-7"><a href="likelihood.html#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span><span class="sc">:</span>      <span class="dv">8</span>      <span class="dv">9</span>      <span class="dv">280</span>   <span class="dv">15</span>        <span class="dv">0</span>    <span class="dv">1</span>        <span class="dv">1</span>     <span class="dv">0</span></span>
+<span id="cb23-8"><a href="likelihood.html#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span><span class="sc">:</span>      <span class="dv">8</span>      <span class="dv">9</span>      <span class="dv">280</span>   <span class="dv">15</span>        <span class="dv">0</span>    <span class="dv">1</span>        <span class="dv">1</span>     <span class="dv">0</span></span>
+<span id="cb23-9"><a href="likelihood.html#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="dv">6</span><span class="sc">:</span>      <span class="dv">9</span>      <span class="dv">9</span>      <span class="dv">266</span>   <span class="dv">23</span>        <span class="dv">0</span>    <span class="dv">1</span>        <span class="dv">1</span>     <span class="dv">1</span></span></code></pre></div>
+<p>In this case, you can see that <code>parity01</code> has been set to 1 for all
+observations, consistent with a static intervention on this node.</p>
+</div>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="npsem.html"><span class="header-section-number">24</span> NPSEM</a></div>
+<div class="next"><a href="update-procedure.html"><span class="header-section-number">26</span> Update Procedure</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li>
+<a class="nav-link" href="#likelihood"><span class="header-section-number">25</span> Likelihood</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#likelihood-factor-objects"><span class="header-section-number">25.0.1</span> Likelihood Factor Objects</a></li>
+<li><a class="nav-link" href="#lf_emp"><span class="header-section-number">25.0.2</span> LF_emp</a></li>
+<li><a class="nav-link" href="#lf_fit"><span class="header-section-number">25.0.3</span> LF_fit</a></li>
+<li><a class="nav-link" href="#specifying-a-priori-knowledge."><span class="header-section-number">25.0.4</span> Specifying a priori knowledge.</a></li>
+<li><a class="nav-link" href="#example-2"><span class="header-section-number">25.0.5</span> Example</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#counterfactual-likelihoods"><span class="header-section-number">25.1</span> Counterfactual Likelihoods</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#lf_static"><span class="header-section-number">25.1.1</span> LF_static</a></li>
+<li><a class="nav-link" href="#other-intervention-likelihood-factor-types"><span class="header-section-number">25.1.2</span> Other intervention likelihood factor types</a></li>
+<li><a class="nav-link" href="#example-3"><span class="header-section-number">25.1.3</span> Example</a></li>
+<li><a class="nav-link" href="#counterfactual-tasks"><span class="header-section-number">25.1.4</span> Counterfactual Tasks</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/tlverse/tlverse-handbook/blob/master/070-tmle3.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/tlverse/tlverse-handbook/edit/master/070-tmle3.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Developer’s Guide to the tlverse</strong>" was written by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on September 10, 2021.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+</html>
