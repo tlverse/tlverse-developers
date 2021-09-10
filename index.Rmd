@@ -16,8 +16,8 @@ colorlinks: yes
 lot: no
 lof: no
 always_allow_html: yes
-url: 'https\://tlverse.org/tlverse-handbook/'
-github-repo: tlverse/tlverse-handbook
+url: 'https\://tlverse.org/tlverse-developers/'
+github-repo: tlverse/tlverse-developers
 twitter-handle: tlverse
 graphics: yes
 description: "A Developer's Guide to understanding and contributing to the [`tlverse` software
@@ -150,7 +150,7 @@ specific versions of the `tlverse` packages used will be archived and tagged to
 produce it.
 
 This book was written using [bookdown](http://bookdown.org/), and the complete
-source is available on [GitHub](https://github.com/tlverse/tlverse-handbook).
+source is available on [GitHub](https://github.com/tlverse/tlverse-developers).
 This version of the book was built with `r R.version.string`,
 [pandoc](https://pandoc.org/) version `r rmarkdown::pandoc_version()`, and the
 following packages:
