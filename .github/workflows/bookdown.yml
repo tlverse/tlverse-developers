@@ -45,7 +45,7 @@ jobs:
       - name: Cache bookdown results
         uses: actions/cache@v2
         with:
-          path: _developersdown_files
+          path: _bookdown_files
           key: bookdown-2-${{ hashFiles('**/*Rmd') }}
           restore-keys: bookdown-2-
 
@@ -60,8 +60,8 @@ jobs:
 
       - name: Render book
         run: |
-          Rscript -e 'bookdown::clean_developers(TRUE)'
-          Rscript -e 'bookdown::render_developers("index.Rmd", quiet = TRUE)'
+          Rscript -e 'bookdown::clean_book(TRUE)'
+          Rscript -e 'bookdown::render_book("index.Rmd", quiet = TRUE)'
 
       - uses: actions/upload-artifact@v1
         with:
