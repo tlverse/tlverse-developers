@@ -51,7 +51,7 @@ jobs:
 
       - name: Install book dependencies
         run: |
-          install.packages("desc")
+          install.packages(c("desc", "sessioninfo"))
           remotes::install_github("rstudio/bookdown")
           remotes::install_github("rstudio/bslib")
           remotes::install_deps(dependencies = TRUE)
