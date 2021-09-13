@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 3 Computation Graphs with delayed | Developer’s Guide to the tlverse</title>
+<meta name="author" content="Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips">
+<meta name="description" content="Jeremy Coyle  3.1 Intro   3.2 Architecture   3.3 Other   3.4 Previous Documentation R supports a range of options to parallelize computation. For an overview, see the HPC Task View on CRAN. In...">
+<meta name="generator" content="bookdown 0.24.1 with bs4_book()">
+<meta property="og:title" content="Chapter 3 Computation Graphs with delayed | Developer’s Guide to the tlverse">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://tlverse.org/tlverse-developers/computation-graphs-with-delayed.html">
+<meta property="og:description" content="Jeremy Coyle  3.1 Intro   3.2 Architecture   3.3 Other   3.4 Previous Documentation R supports a range of options to parallelize computation. For an overview, see the HPC Task View on CRAN. In...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 3 Computation Graphs with delayed | Developer’s Guide to the tlverse">
+<meta name="twitter:site" content="@tlverse">
+<meta name="twitter:description" content="Jeremy Coyle  3.1 Intro   3.2 Architecture   3.3 Other   3.4 Previous Documentation R supports a range of options to parallelize computation. For an overview, see the HPC Task View on CRAN. In...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.0.9000/transition.js"></script><script src="libs/bs3compat-0.3.0.9000/tabs.js"></script><script src="libs/bs3compat-0.3.0.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
+<script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
+</head>
+<body>
+<span class="math inline">
+  \(\DeclareMathOperator{\expit}{expit}\)
+  \(\DeclareMathOperator{\logit}{logit}\)
+  \(\DeclareMathOperator*{\argmin}{\arg\!\min}\)
+  \(\newcommand{\indep}{\perp\!\!\!\perp}\)
+  \(\newcommand{\coloneqq}{\mathrel{=}}\)
+  \(\newcommand{\R}{\mathbb{R}}\)
+  \(\newcommand{\E}{\mathbb{E}}\)
+  \(\newcommand{\M}{\mathcal{M}}\)
+  \(\renewcommand{\P}{\mathbb{P}}\)
+  \(\newcommand{\I}{\mathbb{I}}\)
+  \(\newcommand{\1}{\mathbbm{1}}\)
+  </span>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Developer’s Guide to the tlverse</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">About this book</a></li>
+<li><a class="" href="why-we-need-yet-another-targeted-learning-package.html"><span class="header-section-number">1</span> Why we need yet another Targeted Learning package</a></li>
+<li><a class="" href="tlverse.html"><span class="header-section-number">2</span> Welcome to the tlverse</a></li>
+<li><a class="active" href="computation-graphs-with-delayed.html"><span class="header-section-number">3</span> Computation Graphs with delayed</a></li>
+<li><a class="" href="cross-validation-with-origami.html"><span class="header-section-number">4</span> Cross-validation with origami</a></li>
+<li><a class="" href="super-machine-learning-with-sl3.html"><span class="header-section-number">5</span> Super (Machine) Learning with sl3</a></li>
+<li><a class="" href="the-tmle-framework-with-tmle3.html"><span class="header-section-number">6</span> The TMLE Framework with tmle3</a></li>
+<li><a class="" href="monte-carlo-simulation-with-tmle3sim.html"><span class="header-section-number">7</span> Monte Carlo Simulation with tmle3sim</a></li>
+<li><a class="" href="highly-adaptive-lasso-with-hal9001.html"><span class="header-section-number">8</span> Highly Adaptive Lasso with hal9001</a></li>
+<li><a class="" href="contributing-to-the-tlverse.html"><span class="header-section-number">9</span> Contributing to the tlverse</a></li>
+<li><a class="" href="ensuring-code-quality.html"><span class="header-section-number">10</span> Ensuring Code Quality</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/tlverse/tlverse-developers">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="computation-graphs-with-delayed" class="section level1">
+<h1>
+<span class="header-section-number">3</span> Computation Graphs with <code>delayed</code><a class="anchor" aria-label="anchor" href="#computation-graphs-with-delayed"><i class="fas fa-link"></i></a>
+</h1>
+<p><em>Jeremy Coyle</em></p>
+<div id="intro" class="section level2">
+<h2>
+<span class="header-section-number">3.1</span> Intro<a class="anchor" aria-label="anchor" href="#intro"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="architecture" class="section level2">
+<h2>
+<span class="header-section-number">3.2</span> Architecture<a class="anchor" aria-label="anchor" href="#architecture"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="other" class="section level2">
+<h2>
+<span class="header-section-number">3.3</span> Other<a class="anchor" aria-label="anchor" href="#other"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="previous-documentation" class="section level2">
+<h2>
+<span class="header-section-number">3.4</span> Previous Documentation<a class="anchor" aria-label="anchor" href="#previous-documentation"><i class="fas fa-link"></i></a>
+</h2>
+<p>R supports a range of options to parallelize computation. For an overview, see
+the <a href="https://CRAN.R-project.org/view=HighPerformanceComputing">HPC Task
+View</a> on
+CRAN. In general, these options work extremely well for problems that are
+<em>embarassingly parallel</em>, in that they support procedures such as parallel
+<code>lapply</code> calls and parallel <code>for</code> loops – essentially <code>map</code> operations.
+However, there is no easy way to parallelize <em>dependent</em> tasks in R.</p>
+<p>In contrast, the Python language has the excellent framework for exactly this
+purpose – <a href="http://dask.pydata.org/en/latest/"><code>dask</code></a>. <code>dask</code> makes it easy to
+build up a graph of interdependent tasks and then execute them in parallel in an
+order that optimizes performance <span class="citation">(<span class="citeproc-not-found" data-reference-id="daskLibrary"><strong>???</strong></span>)</span>. The present package seeks to
+reproduce a subset of that functionality in R, specifically the
+<a href="http://dask.pydata.org/en/latest/delayed.html"><code>delayed</code></a> module. To
+parallelize across the tasks, we leverage the excellent
+<a href="https://github.com/HenrikBengtsson/future/"><code>future</code></a> package <span class="citation">(<span class="citeproc-not-found" data-reference-id="futurePackage"><strong>???</strong></span>)</span>.</p>
+<p>The power of the <code>delayed</code> framework is best appreciated when demonstrated by
+example.</p>
+<hr>
+</div>
+<div id="example" class="section level2">
+<h2>
+<span class="header-section-number">3.5</span> Example<a class="anchor" aria-label="anchor" href="#example"><i class="fas fa-link"></i></a>
+</h2>
+<p>The two primary ways to generate <code>Delayed</code> objects in R are via the <code>delayed</code>
+and <code>delayed_fun</code> functions.</p>
+<p><code>delayed</code> is used to delay expressions</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="computation-graphs-with-delayed.html#cb4-1"></a><span class="kw">library</span>(delayed)</span>
+<span id="cb4-2"><a href="computation-graphs-with-delayed.html#cb4-2"></a><span class="co"># delay a simple expression</span></span>
+<span id="cb4-3"><a href="computation-graphs-with-delayed.html#cb4-3"></a>delayed_object &lt;-<span class="st"> </span><span class="kw">delayed</span>(<span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="dv">4</span>)</span>
+<span id="cb4-4"><a href="computation-graphs-with-delayed.html#cb4-4"></a><span class="kw">print</span>(delayed_object)</span>
+<span id="cb4-5"><a href="computation-graphs-with-delayed.html#cb4-5"></a>[<span class="dv">1</span>] <span class="st">"delayed(3 + 4)"</span></span>
+<span id="cb4-6"><a href="computation-graphs-with-delayed.html#cb4-6"></a><span class="co"># compute its result</span></span>
+<span id="cb4-7"><a href="computation-graphs-with-delayed.html#cb4-7"></a>delayed_object<span class="op">$</span><span class="kw">compute</span>()</span>
+<span id="cb4-8"><a href="computation-graphs-with-delayed.html#cb4-8"></a>[<span class="dv">1</span>] <span class="dv">7</span></span></code></pre></div>
+<p>…while <code>delayed_fun</code> wraps a function so that it returns <code>Delayed</code> results</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="computation-graphs-with-delayed.html#cb5-1"></a><span class="co"># delay a function</span></span>
+<span id="cb5-2"><a href="computation-graphs-with-delayed.html#cb5-2"></a>x2 &lt;-<span class="st"> </span><span class="cf">function</span>(x) {x <span class="op">*</span><span class="st"> </span>x}</span>
+<span id="cb5-3"><a href="computation-graphs-with-delayed.html#cb5-3"></a>delayed_x2 &lt;-<span class="st"> </span><span class="kw">delayed_fun</span>(x2)</span>
+<span id="cb5-4"><a href="computation-graphs-with-delayed.html#cb5-4"></a></span>
+<span id="cb5-5"><a href="computation-graphs-with-delayed.html#cb5-5"></a><span class="co"># calling it returns a delayed call</span></span>
+<span id="cb5-6"><a href="computation-graphs-with-delayed.html#cb5-6"></a>delayed_object &lt;-<span class="st"> </span><span class="kw">delayed_x2</span>(<span class="dv">4</span>)</span>
+<span id="cb5-7"><a href="computation-graphs-with-delayed.html#cb5-7"></a><span class="kw">print</span>(delayed_object)</span>
+<span id="cb5-8"><a href="computation-graphs-with-delayed.html#cb5-8"></a>[<span class="dv">1</span>] <span class="st">"delayed(x2(x = 4))"</span></span>
+<span id="cb5-9"><a href="computation-graphs-with-delayed.html#cb5-9"></a><span class="co"># again, we can compute its result</span></span>
+<span id="cb5-10"><a href="computation-graphs-with-delayed.html#cb5-10"></a>delayed_object<span class="op">$</span><span class="kw">compute</span>()</span>
+<span id="cb5-11"><a href="computation-graphs-with-delayed.html#cb5-11"></a>[<span class="dv">1</span>] <span class="dv">16</span></span></code></pre></div>
+<p>These elements of the functionality of <code>delayed</code> are substantially similar to
+the facilities already offered by the <code>future</code> package. <code>delayed</code> diverges from
+<code>future</code> by offereing the ability to chain <code>Delayed</code> objects together. For
+example:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="computation-graphs-with-delayed.html#cb6-1"></a><span class="co"># delay a simple expression</span></span>
+<span id="cb6-2"><a href="computation-graphs-with-delayed.html#cb6-2"></a>delayed_object_<span class="dv">7</span> &lt;-<span class="st"> </span><span class="kw">delayed</span>(<span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="dv">4</span>)</span>
+<span id="cb6-3"><a href="computation-graphs-with-delayed.html#cb6-3"></a></span>
+<span id="cb6-4"><a href="computation-graphs-with-delayed.html#cb6-4"></a><span class="co"># and another</span></span>
+<span id="cb6-5"><a href="computation-graphs-with-delayed.html#cb6-5"></a>delayed_object_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">delayed</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>)</span>
+<span id="cb6-6"><a href="computation-graphs-with-delayed.html#cb6-6"></a></span>
+<span id="cb6-7"><a href="computation-graphs-with-delayed.html#cb6-7"></a><span class="co"># delay a function for addition</span></span>
+<span id="cb6-8"><a href="computation-graphs-with-delayed.html#cb6-8"></a>adder &lt;-<span class="st"> </span><span class="cf">function</span>(x, y){x <span class="op">+</span><span class="st"> </span>y}</span>
+<span id="cb6-9"><a href="computation-graphs-with-delayed.html#cb6-9"></a>delayed_adder &lt;-<span class="st"> </span><span class="kw">delayed_fun</span>(adder)</span>
+<span id="cb6-10"><a href="computation-graphs-with-delayed.html#cb6-10"></a></span>
+<span id="cb6-11"><a href="computation-graphs-with-delayed.html#cb6-11"></a><span class="co"># but now, use one delayed as input to another</span></span>
+<span id="cb6-12"><a href="computation-graphs-with-delayed.html#cb6-12"></a>chained_delayed_<span class="dv">10</span> &lt;-<span class="st"> </span><span class="kw">delayed_adder</span>(delayed_object_<span class="dv">7</span>, delayed_object_<span class="dv">3</span>)</span>
+<span id="cb6-13"><a href="computation-graphs-with-delayed.html#cb6-13"></a></span>
+<span id="cb6-14"><a href="computation-graphs-with-delayed.html#cb6-14"></a><span class="co"># We can still compute its result.</span></span>
+<span id="cb6-15"><a href="computation-graphs-with-delayed.html#cb6-15"></a>chained_delayed_<span class="dv">10</span><span class="op">$</span><span class="kw">compute</span>()</span>
+<span id="cb6-16"><a href="computation-graphs-with-delayed.html#cb6-16"></a>[<span class="dv">1</span>] <span class="dv">10</span></span></code></pre></div>
+<p>We can visualize the dependency structure of these delayed tasks by calling
+<code>plot</code> on the resultant <code>Delayed</code> object:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">chained_delayed_10</span><span class="op">)</span></code></pre></div>
+<div id="htmlwidget-f24f61b14a52b30b1486" style="width:100%;height:500px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f24f61b14a52b30b1486">{"x":{"nodes":{"id":["64f37a52-1456-11ec-83e3-000d3aec34c9","64f2c2b0-1456-11ec-83e3-000d3aec34c9","64f2f99c-1456-11ec-83e3-000d3aec34c9"],"label":["adder(x = delayed_object_7, y = delayed_object_3)","3 + 4","1 + 2"],"level":[1,2,2],"sequential":[false,false,false],"state":["resolved","resolved","resolved"],"group":["resolved","resolved","resolved"],"shape":["dot","dot","dot"]},"edges":{"from":["64f2c2b0-1456-11ec-83e3-000d3aec34c9","64f2f99c-1456-11ec-83e3-000d3aec34c9"],"to":["64f37a52-1456-11ec-83e3-000d3aec34c9","64f37a52-1456-11ec-83e3-000d3aec34c9"],"label":["",""]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"edges":{"arrows":"to"},"layout":{"hierarchical":{"enabled":true,"levelSeparation":500,"nodeSpacing":200,"direction":"RL"}},"groups":{"waiting":{"color":{"border":"black","background":"white"}},"ready":{"color":{"border":"black","background":"orange"}},"running":{"color":{"border":"black","background":"lightgreen"}},"resolved":{"color":{"border":"black","background":"black"}},"useDefaultGroups":true,"error":{"color":{"border":"black","background":"lightpink"}}}},"groups":["resolved"],"width":"100%","height":"500px","idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","legend":{"width":0.2,"useGroups":false,"position":"left","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["waiting","ready","running","resolved","error","sequential","parallel"],"color":[{"border":"black","background":"white"},{"border":"black","background":"orange"},{"border":"black","background":"lightgreen"},{"border":"black","background":"black"},{"border":"black","background":"lightpink"},{"border":"black","background":"white"},{"border":"black","background":"white"}],"shape":["dot","dot","dot","dot","dot","square","dot"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script><hr>
+</div>
+<div id="parallelization" class="section level2">
+<h2>
+<span class="header-section-number">3.6</span> Parallelization<a class="anchor" aria-label="anchor" href="#parallelization"><i class="fas fa-link"></i></a>
+</h2>
+<p>Now that we’ve had an elementary look at the functionality offered by <code>delayed</code>,
+we may take a look at how to parallelize dependent computations – the core
+problem addressed by the package. We can easily parallelize across dependency
+structures by specifying a <code>future</code> <code>plan</code>. Let’s try it out</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="computation-graphs-with-delayed.html#cb8-1"></a><span class="kw">library</span>(future)</span>
+<span id="cb8-2"><a href="computation-graphs-with-delayed.html#cb8-2"></a><span class="kw">plan</span>(multicore, <span class="dt">workers =</span> <span class="dv">2</span>)</span>
+<span id="cb8-3"><a href="computation-graphs-with-delayed.html#cb8-3"></a></span>
+<span id="cb8-4"><a href="computation-graphs-with-delayed.html#cb8-4"></a><span class="co"># re-define the delayed object from above</span></span>
+<span id="cb8-5"><a href="computation-graphs-with-delayed.html#cb8-5"></a>delayed_object_<span class="dv">7</span> &lt;-<span class="st"> </span><span class="kw">delayed</span>(<span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="dv">4</span>)</span>
+<span id="cb8-6"><a href="computation-graphs-with-delayed.html#cb8-6"></a>delayed_object_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">delayed</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>)</span>
+<span id="cb8-7"><a href="computation-graphs-with-delayed.html#cb8-7"></a>chained_delayed_<span class="dv">10</span> &lt;-<span class="st"> </span><span class="kw">delayed_adder</span>(delayed_object_<span class="dv">7</span>, delayed_object_<span class="dv">3</span>)</span>
+<span id="cb8-8"><a href="computation-graphs-with-delayed.html#cb8-8"></a></span>
+<span id="cb8-9"><a href="computation-graphs-with-delayed.html#cb8-9"></a><span class="co"># compute it using the future plan (two multicore workers), verbose mode lets</span></span>
+<span id="cb8-10"><a href="computation-graphs-with-delayed.html#cb8-10"></a><span class="co"># us see the computation order</span></span>
+<span id="cb8-11"><a href="computation-graphs-with-delayed.html#cb8-11"></a>chained_delayed_<span class="dv">10</span><span class="op">$</span><span class="kw">compute</span>(<span class="dt">nworkers =</span> <span class="dv">2</span>, <span class="dt">verbose =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb8-12"><a href="computation-graphs-with-delayed.html#cb8-12"></a>[<span class="dv">1</span>] <span class="dv">10</span></span></code></pre></div>
+<p>The above illustrates the typical lifecycle of a delayed task. Such procedures
+start with a state of <code>"waiting"</code>, which means that a given task depends on
+other delayed tasks that are not yet complete. If the task in question has no
+delayed dependencies – or when these dependencies become resolved – the task
+transitions to a <code>"ready"</code> state. This means it will be run as soon as a worker
+is available to process the task. Once the task is assigned to a worker, the
+state of the task changes to <code>"running"</code>; and when processing of the task is
+complete, it is finally marked <code>"resolved"</code>.</p>
+<hr>
+</div>
+<div id="future-work" class="section level2">
+<h2>
+<span class="header-section-number">3.7</span> Future Work<a class="anchor" aria-label="anchor" href="#future-work"><i class="fas fa-link"></i></a>
+</h2>
+<div id="scheduling-tasks" class="section level3">
+<h3>
+<span class="header-section-number">3.7.1</span> Scheduling Tasks<a class="anchor" aria-label="anchor" href="#scheduling-tasks"><i class="fas fa-link"></i></a>
+</h3>
+<p>When multiple tasks are simulatenously <code>"ready"</code>, the scheduler must decide
+which to assign to the next available worker. Currently, the scheduler simply
+prioritizes tasks that are likely to result in other tasks becoming “ready”. In
+the future, we plan to build more advanced scheduling features, similar to those
+available in the <code>dask</code> library. An overview of that functionality is described
+here: <a href="https://distributed.readthedocs.io/en/latest/scheduling-policies.html" class="uri">https://distributed.readthedocs.io/en/latest/scheduling-policies.html</a></p>
+</div>
+<div id="distributed-data" class="section level3">
+<h3>
+<span class="header-section-number">3.7.2</span> Distributed Data<a class="anchor" aria-label="anchor" href="#distributed-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>Another key features of <code>dask</code> is <a href="https://distributed.readthedocs.io/en/latest/locality.html"><em>data
+locality</em></a>. That is,
+data is only present on workers that need it for a given task, and is only
+shared between workers when necessary. Tasks are then prioritized to workers
+that have all the necessary components. We have begun to implement a similar
+framework, though this work remains incomplete.</p>
+
+</div>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="tlverse.html"><span class="header-section-number">2</span> Welcome to the tlverse</a></div>
+<div class="next"><a href="cross-validation-with-origami.html"><span class="header-section-number">4</span> Cross-validation with origami</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#computation-graphs-with-delayed"><span class="header-section-number">3</span> Computation Graphs with delayed</a></li>
+<li><a class="nav-link" href="#intro"><span class="header-section-number">3.1</span> Intro</a></li>
+<li><a class="nav-link" href="#architecture"><span class="header-section-number">3.2</span> Architecture</a></li>
+<li><a class="nav-link" href="#other"><span class="header-section-number">3.3</span> Other</a></li>
+<li><a class="nav-link" href="#previous-documentation"><span class="header-section-number">3.4</span> Previous Documentation</a></li>
+<li><a class="nav-link" href="#example"><span class="header-section-number">3.5</span> Example</a></li>
+<li><a class="nav-link" href="#parallelization"><span class="header-section-number">3.6</span> Parallelization</a></li>
+<li>
+<a class="nav-link" href="#future-work"><span class="header-section-number">3.7</span> Future Work</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#scheduling-tasks"><span class="header-section-number">3.7.1</span> Scheduling Tasks</a></li>
+<li><a class="nav-link" href="#distributed-data"><span class="header-section-number">3.7.2</span> Distributed Data</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/tlverse/tlverse-developers/blob/master/030-delayed.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/tlverse/tlverse-developers/edit/master/030-delayed.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Developer’s Guide to the tlverse</strong>" was written by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on September 13, 2021.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>
